@@ -7,6 +7,7 @@ import equipamientoRoutes from "../routes/equipamiento";
 import perfilRoutes from "../routes/perfil";
 import calificacionRoutes from "../routes/calificacion";
 import likeRoutes from "../routes/like";
+import rutinaRoutes from "../routes/rutina";
 import db from '../db/conecction';
 class Server {
     private app: Application;
@@ -19,6 +20,7 @@ class Server {
         perfiles: '/api/perfiles',
         calificaciones: '/api/calificaciones',
         likes: '/api/likes',
+        rutinas: '/api/rutinas',
     }
     constructor() {
         this.app=express();
@@ -52,7 +54,8 @@ class Server {
         this.app.use(this.apiPaths.equipamientos, equipamientoRoutes),
         this.app.use(this.apiPaths.perfiles, perfilRoutes),
         this.app.use(this.apiPaths.calificaciones, calificacionRoutes),
-        this.app.use(this.apiPaths.likes, likeRoutes)
+        this.app.use(this.apiPaths.likes, likeRoutes),
+        this.app.use(this.apiPaths.rutinas, rutinaRoutes)
     }
     listen(){
         this.app.listen(this.port,()=>{

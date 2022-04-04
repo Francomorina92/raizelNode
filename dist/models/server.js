@@ -21,6 +21,7 @@ const equipamiento_1 = __importDefault(require("../routes/equipamiento"));
 const perfil_1 = __importDefault(require("../routes/perfil"));
 const calificacion_1 = __importDefault(require("../routes/calificacion"));
 const like_1 = __importDefault(require("../routes/like"));
+const rutina_1 = __importDefault(require("../routes/rutina"));
 const conecction_1 = __importDefault(require("../db/conecction"));
 class Server {
     constructor() {
@@ -32,6 +33,7 @@ class Server {
             perfiles: '/api/perfiles',
             calificaciones: '/api/calificaciones',
             likes: '/api/likes',
+            rutinas: '/api/rutinas',
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8000';
@@ -65,7 +67,8 @@ class Server {
             this.app.use(this.apiPaths.equipamientos, equipamiento_1.default),
             this.app.use(this.apiPaths.perfiles, perfil_1.default),
             this.app.use(this.apiPaths.calificaciones, calificacion_1.default),
-            this.app.use(this.apiPaths.likes, like_1.default);
+            this.app.use(this.apiPaths.likes, like_1.default),
+            this.app.use(this.apiPaths.rutinas, rutina_1.default);
     }
     listen() {
         this.app.listen(this.port, () => {
