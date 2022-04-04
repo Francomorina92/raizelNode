@@ -1,26 +1,28 @@
 import express,{Application} from 'express'
 import cors from "cors";
-import userRoutes from "../routes/usuario";
-import categoriaRoutes from "../routes/categoria";
-import musculoRoutes from "../routes/musculo";
-import equipamientoRoutes from "../routes/equipamiento";
-import perfilRoutes from "../routes/perfil";
+
 import calificacionRoutes from "../routes/calificacion";
+import categoriaRoutes from "../routes/categoria";
+import equipamientoRoutes from "../routes/equipamiento";
 import likeRoutes from "../routes/like";
+import musculoRoutes from "../routes/musculo";
+import perfilRoutes from "../routes/perfil";
 import rutinaRoutes from "../routes/rutina";
+import userRoutes from "../routes/usuario";
+
 import db from '../db/conecction';
 class Server {
     private app: Application;
     private port: string;
     private apiPaths={
-        usuarios: '/api/usuarios',
-        categorias: '/api/categorias',
-        musculos: '/api/musculos',
-        equipamientos: '/api/equipamientos',
-        perfiles: '/api/perfiles',
         calificaciones: '/api/calificaciones',
+        categorias: '/api/categorias',
+        equipamientos: '/api/equipamientos',
         likes: '/api/likes',
+        musculos: '/api/musculos',
+        perfiles: '/api/perfiles',
         rutinas: '/api/rutinas',
+        usuarios: '/api/usuarios',
     }
     constructor() {
         this.app=express();
@@ -48,14 +50,14 @@ class Server {
         this.app.use(express.static('public'))
     }
     routes(){
-        this.app.use(this.apiPaths.usuarios, userRoutes),
-        this.app.use(this.apiPaths.categorias, categoriaRoutes),
-        this.app.use(this.apiPaths.musculos, musculoRoutes),
-        this.app.use(this.apiPaths.equipamientos, equipamientoRoutes),
-        this.app.use(this.apiPaths.perfiles, perfilRoutes),
         this.app.use(this.apiPaths.calificaciones, calificacionRoutes),
+        this.app.use(this.apiPaths.categorias, categoriaRoutes),
+        this.app.use(this.apiPaths.equipamientos, equipamientoRoutes),
         this.app.use(this.apiPaths.likes, likeRoutes),
-        this.app.use(this.apiPaths.rutinas, rutinaRoutes)
+        this.app.use(this.apiPaths.musculos, musculoRoutes),
+        this.app.use(this.apiPaths.perfiles, perfilRoutes),
+        this.app.use(this.apiPaths.rutinas, rutinaRoutes),
+        this.app.use(this.apiPaths.usuarios, userRoutes)
     }
     listen(){
         this.app.listen(this.port,()=>{

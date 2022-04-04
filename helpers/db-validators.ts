@@ -1,6 +1,7 @@
 import Rol from "../models/rol";
 import Usuario from "../models/usuario";
 import Perfil from "../models/perfil";
+import Rutina from "../models/rutina";
 
 export const esRoleValido =  async(rol='')=>{
     const existeRol= await Rol.findOne({
@@ -33,6 +34,12 @@ export const esPerfilValido =  async(idPerfil='')=>{
     const existePerfil= await Perfil.findByPk(idPerfil);
     if (!existePerfil) {
         throw new Error(`El perfil ${idPerfil} no esta registrado en la BD`);
+    }
+}
+export const esRutinaValida =  async(idRutina='')=>{
+    const existeRutina= await Rutina.findByPk(idRutina);
+    if (!existeRutina) {
+        throw new Error(`La rutina ${idRutina} no esta registrada en la BD`);
     }
 }
 
