@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.esUsuarioValido = exports.existeEmail = exports.esRoleValido = void 0;
+exports.esPerfilValido = exports.esUsuarioValido = exports.existeEmail = exports.esRoleValido = void 0;
 const rol_1 = __importDefault(require("../models/rol"));
 const usuario_1 = __importDefault(require("../models/usuario"));
+const perfil_1 = __importDefault(require("../models/perfil"));
 const esRoleValido = (rol = '') => __awaiter(void 0, void 0, void 0, function* () {
     const existeRol = yield rol_1.default.findOne({
         where: {
@@ -45,4 +46,11 @@ const esUsuarioValido = (idUsuario = '') => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.esUsuarioValido = esUsuarioValido;
+const esPerfilValido = (idPerfil = '') => __awaiter(void 0, void 0, void 0, function* () {
+    const existePerfil = yield perfil_1.default.findByPk(idPerfil);
+    if (!existePerfil) {
+        throw new Error(`El perfil ${idPerfil} no esta registrado en la BD`);
+    }
+});
+exports.esPerfilValido = esPerfilValido;
 //# sourceMappingURL=db-validators.js.map
