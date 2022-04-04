@@ -22,4 +22,10 @@ export const existeEmail = async(email = '')=>{
         throw new Error(`Ya existe un usuario con el email  ${email}`);
     }
 }
+export const esUsuarioValido =  async(idUsuario='')=>{
+    const existeUsuario= await Usuario.findByPk(idUsuario);
+    if (!existeUsuario) {
+        throw new Error(`El usuario ${idUsuario} no esta registrado en la BD`);
+    }
+}
 

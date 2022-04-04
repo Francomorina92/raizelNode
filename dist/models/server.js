@@ -18,6 +18,7 @@ const usuario_1 = __importDefault(require("../routes/usuario"));
 const categoria_1 = __importDefault(require("../routes/categoria"));
 const musculo_1 = __importDefault(require("../routes/musculo"));
 const equipamiento_1 = __importDefault(require("../routes/equipamiento"));
+const perfil_1 = __importDefault(require("../routes/perfil"));
 const conecction_1 = __importDefault(require("../db/conecction"));
 class Server {
     constructor() {
@@ -26,6 +27,7 @@ class Server {
             categorias: '/api/categorias',
             musculos: '/api/musculos',
             equipamientos: '/api/equipamientos',
+            perfiles: '/api/perfiles',
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8000';
@@ -56,7 +58,8 @@ class Server {
         this.app.use(this.apiPaths.usuarios, usuario_1.default),
             this.app.use(this.apiPaths.categorias, categoria_1.default),
             this.app.use(this.apiPaths.musculos, musculo_1.default),
-            this.app.use(this.apiPaths.equipamientos, equipamiento_1.default);
+            this.app.use(this.apiPaths.equipamientos, equipamiento_1.default),
+            this.app.use(this.apiPaths.perfiles, perfil_1.default);
     }
     listen() {
         this.app.listen(this.port, () => {
