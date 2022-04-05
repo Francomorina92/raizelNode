@@ -2,6 +2,9 @@ import Rol from "../models/rol";
 import Usuario from "../models/usuario";
 import Perfil from "../models/perfil";
 import Rutina from "../models/rutina";
+import Musculo from "../models/musculo";
+import Equipamiento from "../models/equipamiento";
+import Categoria from "../models/categoria";
 
 export const esRoleValido =  async(rol='')=>{
     const existeRol= await Rol.findOne({
@@ -40,6 +43,24 @@ export const esRutinaValida =  async(idRutina='')=>{
     const existeRutina= await Rutina.findByPk(idRutina);
     if (!existeRutina) {
         throw new Error(`La rutina ${idRutina} no esta registrada en la BD`);
+    }
+}
+export const esMusculoValido =  async(idMusculo='')=>{
+    const existeMusculo= await Musculo.findByPk(idMusculo);
+    if (!existeMusculo) {
+        throw new Error(`El musculo ${idMusculo} no esta registrado en la BD`);
+    }
+}
+export const esEquipamientoValido =  async(idEquipamiento='')=>{
+    const existeEquipamiento= await Equipamiento.findByPk(idEquipamiento);
+    if (!existeEquipamiento) {
+        throw new Error(`El equipamiento ${idEquipamiento} no esta registrado en la BD`);
+    }
+}
+export const esCategoriaValida =  async(idCategoria='')=>{
+    const existeCategoria= await Categoria.findByPk(idCategoria);
+    if (!existeCategoria) {
+        throw new Error(`La Categoria ${idCategoria} no esta registrada en la BD`);
     }
 }
 

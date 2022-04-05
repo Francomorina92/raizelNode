@@ -9,6 +9,7 @@ import musculoRoutes from "../routes/musculo";
 import perfilRoutes from "../routes/perfil";
 import rutinaRoutes from "../routes/rutina";
 import userRoutes from "../routes/usuario";
+import ejercicioRoutes from "../routes/ejercicio";
 
 import db from '../db/conecction';
 class Server {
@@ -23,6 +24,7 @@ class Server {
         perfiles: '/api/perfiles',
         rutinas: '/api/rutinas',
         usuarios: '/api/usuarios',
+        ejercicios: '/api/ejercicios',
     }
     constructor() {
         this.app=express();
@@ -57,7 +59,8 @@ class Server {
         this.app.use(this.apiPaths.musculos, musculoRoutes),
         this.app.use(this.apiPaths.perfiles, perfilRoutes),
         this.app.use(this.apiPaths.rutinas, rutinaRoutes),
-        this.app.use(this.apiPaths.usuarios, userRoutes)
+        this.app.use(this.apiPaths.usuarios, userRoutes),
+        this.app.use(this.apiPaths.ejercicios, ejercicioRoutes)
     }
     listen(){
         this.app.listen(this.port,()=>{
