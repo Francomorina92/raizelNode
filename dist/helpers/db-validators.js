@@ -12,11 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.esRutinaValida = exports.esPerfilValido = exports.esUsuarioValido = exports.existeEmail = exports.esRoleValido = void 0;
+exports.esCategoriaValida = exports.esEquipamientoValido = exports.esMusculoValido = exports.esRutinaValida = exports.esPerfilValido = exports.esUsuarioValido = exports.existeEmail = exports.esRoleValido = void 0;
 const rol_1 = __importDefault(require("../models/rol"));
 const usuario_1 = __importDefault(require("../models/usuario"));
 const perfil_1 = __importDefault(require("../models/perfil"));
 const rutina_1 = __importDefault(require("../models/rutina"));
+const musculo_1 = __importDefault(require("../models/musculo"));
+const equipamiento_1 = __importDefault(require("../models/equipamiento"));
+const categoria_1 = __importDefault(require("../models/categoria"));
 const esRoleValido = (rol = '') => __awaiter(void 0, void 0, void 0, function* () {
     const existeRol = yield rol_1.default.findOne({
         where: {
@@ -61,4 +64,25 @@ const esRutinaValida = (idRutina = '') => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.esRutinaValida = esRutinaValida;
+const esMusculoValido = (idMusculo = '') => __awaiter(void 0, void 0, void 0, function* () {
+    const existeMusculo = yield musculo_1.default.findByPk(idMusculo);
+    if (!existeMusculo) {
+        throw new Error(`El musculo ${idMusculo} no esta registrado en la BD`);
+    }
+});
+exports.esMusculoValido = esMusculoValido;
+const esEquipamientoValido = (idEquipamiento = '') => __awaiter(void 0, void 0, void 0, function* () {
+    const existeEquipamiento = yield equipamiento_1.default.findByPk(idEquipamiento);
+    if (!existeEquipamiento) {
+        throw new Error(`El equipamiento ${idEquipamiento} no esta registrado en la BD`);
+    }
+});
+exports.esEquipamientoValido = esEquipamientoValido;
+const esCategoriaValida = (idCategoria = '') => __awaiter(void 0, void 0, void 0, function* () {
+    const existeCategoria = yield categoria_1.default.findByPk(idCategoria);
+    if (!existeCategoria) {
+        throw new Error(`La Categoria ${idCategoria} no esta registrada en la BD`);
+    }
+});
+exports.esCategoriaValida = esCategoriaValida;
 //# sourceMappingURL=db-validators.js.map
