@@ -16,13 +16,13 @@ router.get('/:id', [
 ], like_1.getLike);
 router.post('/', [
     (0, express_validator_1.check)('idPerfil').custom(db_validators_1.esPerfilValido),
-    (0, express_validator_1.check)('idRutina').custom(db_validators_1.esPerfilValido),
+    (0, express_validator_1.check)('idRutina').custom(db_validators_1.esRutinaValida),
     validar_campos_1.default
 ], like_1.postLike);
 router.put('/:id', [
     (0, express_validator_1.check)('id', 'El id tiene que ser numerico').isInt(),
     (0, express_validator_1.check)('idPerfil').custom(db_validators_1.esPerfilValido),
-    (0, express_validator_1.check)('idRutina').custom(db_validators_1.esPerfilValido),
+    (0, express_validator_1.check)('idRutina').custom(db_validators_1.esRutinaValida),
     validar_campos_1.default
 ], like_1.putLike);
 router.delete('/:id', [

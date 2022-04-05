@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.esPerfilValido = exports.esUsuarioValido = exports.existeEmail = exports.esRoleValido = void 0;
+exports.esRutinaValida = exports.esPerfilValido = exports.esUsuarioValido = exports.existeEmail = exports.esRoleValido = void 0;
 const rol_1 = __importDefault(require("../models/rol"));
 const usuario_1 = __importDefault(require("../models/usuario"));
 const perfil_1 = __importDefault(require("../models/perfil"));
+const rutina_1 = __importDefault(require("../models/rutina"));
 const esRoleValido = (rol = '') => __awaiter(void 0, void 0, void 0, function* () {
     const existeRol = yield rol_1.default.findOne({
         where: {
@@ -53,4 +54,11 @@ const esPerfilValido = (idPerfil = '') => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.esPerfilValido = esPerfilValido;
+const esRutinaValida = (idRutina = '') => __awaiter(void 0, void 0, void 0, function* () {
+    const existeRutina = yield rutina_1.default.findByPk(idRutina);
+    if (!existeRutina) {
+        throw new Error(`La rutina ${idRutina} no esta registrada en la BD`);
+    }
+});
+exports.esRutinaValida = esRutinaValida;
 //# sourceMappingURL=db-validators.js.map

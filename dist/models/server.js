@@ -14,26 +14,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const usuario_1 = __importDefault(require("../routes/usuario"));
-const categoria_1 = __importDefault(require("../routes/categoria"));
-const musculo_1 = __importDefault(require("../routes/musculo"));
-const equipamiento_1 = __importDefault(require("../routes/equipamiento"));
-const perfil_1 = __importDefault(require("../routes/perfil"));
 const calificacion_1 = __importDefault(require("../routes/calificacion"));
+const categoria_1 = __importDefault(require("../routes/categoria"));
+const equipamiento_1 = __importDefault(require("../routes/equipamiento"));
 const like_1 = __importDefault(require("../routes/like"));
+const musculo_1 = __importDefault(require("../routes/musculo"));
+const perfil_1 = __importDefault(require("../routes/perfil"));
 const rutina_1 = __importDefault(require("../routes/rutina"));
+const usuario_1 = __importDefault(require("../routes/usuario"));
 const conecction_1 = __importDefault(require("../db/conecction"));
 class Server {
     constructor() {
         this.apiPaths = {
-            usuarios: '/api/usuarios',
-            categorias: '/api/categorias',
-            musculos: '/api/musculos',
-            equipamientos: '/api/equipamientos',
-            perfiles: '/api/perfiles',
             calificaciones: '/api/calificaciones',
+            categorias: '/api/categorias',
+            equipamientos: '/api/equipamientos',
             likes: '/api/likes',
+            musculos: '/api/musculos',
+            perfiles: '/api/perfiles',
             rutinas: '/api/rutinas',
+            usuarios: '/api/usuarios',
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8000';
@@ -61,14 +61,14 @@ class Server {
         this.app.use(express_1.default.static('public'));
     }
     routes() {
-        this.app.use(this.apiPaths.usuarios, usuario_1.default),
+        this.app.use(this.apiPaths.calificaciones, calificacion_1.default),
             this.app.use(this.apiPaths.categorias, categoria_1.default),
-            this.app.use(this.apiPaths.musculos, musculo_1.default),
             this.app.use(this.apiPaths.equipamientos, equipamiento_1.default),
-            this.app.use(this.apiPaths.perfiles, perfil_1.default),
-            this.app.use(this.apiPaths.calificaciones, calificacion_1.default),
             this.app.use(this.apiPaths.likes, like_1.default),
-            this.app.use(this.apiPaths.rutinas, rutina_1.default);
+            this.app.use(this.apiPaths.musculos, musculo_1.default),
+            this.app.use(this.apiPaths.perfiles, perfil_1.default),
+            this.app.use(this.apiPaths.rutinas, rutina_1.default),
+            this.app.use(this.apiPaths.usuarios, usuario_1.default);
     }
     listen() {
         this.app.listen(this.port, () => {
