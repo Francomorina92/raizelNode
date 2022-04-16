@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCategoria = exports.putCategoria = exports.postCategoria = exports.getCategoria = exports.getCategorias = void 0;
 const categoria_1 = __importDefault(require("../models/categoria"));
 const getCategorias = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 5, desde = 1, orden = 'asc', campo = 'nombre' } = req.query;
+    const { limite = 5, desde = 0, orden = 'asc', campo = 'nombre' } = req.params;
     const categorias = yield categoria_1.default.findAndCountAll({
         limit: Number(limite),
         offset: Number(desde),
@@ -39,10 +39,10 @@ const getCategoria = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.getCategoria = getCategoria;
 const postCategoria = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Obtenemos los datos por el post
-    const { nombre } = req.body;
+    const { nombre, estado = 1 } = req.body;
     try {
         //Guardamos en BD
-        const categoria = yield categoria_1.default.create({ nombre, estado: 1 });
+        const categoria = yield categoria_1.default.create({ nombre, estado });
         res.json(categoria);
     }
     catch (error) {

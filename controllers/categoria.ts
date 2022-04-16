@@ -3,7 +3,7 @@ import Categoria from '../models/categoria';
 
 
 export const getCategorias= async (req:Request ,res:Response)=>{
-    const {limite = 5,desde = 1,orden = 'asc',campo = 'nombre'}= req.query; 
+    const {limite = 5,desde = 0,orden = 'asc',campo = 'nombre'}= req.params; 
     
     const categorias= await Categoria.findAndCountAll(
         {
@@ -27,13 +27,12 @@ export const getCategoria= async(req:Request ,res:Response)=>{
     }
 }
 export const postCategoria= async (req:Request ,res:Response)=>{
-
     //Obtenemos los datos por el post
-    const {nombre}=req.body;
+    const {nombre, estado=1}=req.body;
     
     try {
         //Guardamos en BD
-        const categoria = await Categoria.create({nombre,estado:1});
+        const categoria = await Categoria.create({nombre,estado});
         res.json(categoria);
     } catch (error) {
         console.log(error);

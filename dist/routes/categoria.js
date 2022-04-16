@@ -8,7 +8,7 @@ const express_validator_1 = require("express-validator");
 const categoria_1 = require("../controllers/categoria");
 const validar_campos_1 = __importDefault(require("../middlewares/validar-campos"));
 const router = (0, express_1.Router)();
-router.get('/', categoria_1.getCategorias);
+router.get('/:limite/:desde', categoria_1.getCategorias);
 router.get('/:id', [
     (0, express_validator_1.check)('id').isInt(),
     validar_campos_1.default

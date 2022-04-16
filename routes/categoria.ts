@@ -6,7 +6,7 @@ import validarCampos from "../middlewares/validar-campos";
 
 const router = Router();
 
-router.get('/',     getCategorias);
+router.get('/:limite/:desde',     getCategorias);
 router.get('/:id',[
     check('id').isInt(),
     validarCampos
