@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteEquipamiento = exports.putEquipamiento = exports.postEquipamiento = exports.getEquipamiento = exports.getEquipamientos = void 0;
 const equipamiento_1 = __importDefault(require("../models/equipamiento"));
 const getEquipamientos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 5, desde = 0, orden = 'asc', campo = 'nombre' } = req.query;
+    const { limite = 5, desde = 0, orden = 'asc', campo = 'nombre' } = req.params;
     const equipamientos = yield equipamiento_1.default.findAndCountAll({
         limit: Number(limite),
         offset: Number(desde),
