@@ -35,7 +35,6 @@ export const postCategoria= async (req:Request ,res:Response)=>{
         const categoria = await Categoria.create({nombre,estado});
         res.json(categoria);
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })
@@ -55,7 +54,6 @@ export const putCategoria= async (req:Request ,res:Response)=>{
         await categoria.update({nombre, estado});
         res.json(categoria);
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })

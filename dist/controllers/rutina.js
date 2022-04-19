@@ -46,7 +46,6 @@ const postRutina = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.json(rutina);
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });
@@ -67,7 +66,6 @@ const putRutina = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json({ msg: 'Rutina actualizada perfectamente' });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });

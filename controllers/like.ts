@@ -36,7 +36,6 @@ export const postLike= async (req:Request ,res:Response)=>{
         const like = await Like.create({idPerfil,idRutina,estado:1});
         res.json(like);
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })
@@ -56,7 +55,6 @@ export const putLike= async (req:Request ,res:Response)=>{
         await like.update({idPerfil,idRutina,estado});
         res.json({msg: 'Like actualizado perfectamente'});
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })

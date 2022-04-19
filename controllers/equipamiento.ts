@@ -36,7 +36,6 @@ export const postEquipamiento= async (req:Request ,res:Response)=>{
         const equipamiento = await Equipamiento.create({nombre,estado:1});
         res.json(equipamiento);
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })
@@ -56,7 +55,6 @@ export const putEquipamiento= async (req:Request ,res:Response)=>{
         await equipamiento.update({nombre, estado});
         res.json(equipamiento);
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })

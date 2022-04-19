@@ -36,7 +36,6 @@ export const postPerfil= async (req:Request ,res:Response)=>{
         const perfil = await Perfil.create({nombre,idUsuario,apellido,facebook,twitter,instagram,web,estado:1});
         res.json(perfil);
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })
@@ -56,7 +55,6 @@ export const putPerfil= async (req:Request ,res:Response)=>{
         await perfil.update({nombre,idUsuario,apellido,facebook,twitter,instagram,web,estado});
         res.json({msg: 'perfil actualizado perfectamente'});
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })

@@ -12,6 +12,7 @@ const router = (0, express_1.Router)();
 router.get('/', usuario_1.getUsuarios);
 router.get('/:id', usuario_1.getUsuario);
 router.post('/', [
+    (0, express_validator_1.check)('nombre', 'El nombre debe ser mas de 4 letras').isLength({ min: 4 }),
     (0, express_validator_1.check)('password', 'El password debe ser mas de 6 letras').isLength({ min: 6 }),
     (0, express_validator_1.check)('email', 'El correo no es valido').isEmail(),
     (0, express_validator_1.check)('email').custom(db_validators_1.existeEmail),

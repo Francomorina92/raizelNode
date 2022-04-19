@@ -46,7 +46,6 @@ const postEjercicio = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.json(ejercicio);
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });
@@ -67,7 +66,6 @@ const putEjercicio = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.json({ msg: 'Ejercicio actualizado perfectamente' });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });

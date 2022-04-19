@@ -46,7 +46,6 @@ const postLike = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json(like);
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });
@@ -67,7 +66,6 @@ const putLike = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json({ msg: 'Like actualizado perfectamente' });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });

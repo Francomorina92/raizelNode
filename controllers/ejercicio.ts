@@ -36,7 +36,6 @@ export const postEjercicio= async (req:Request ,res:Response)=>{
         const ejercicio = await Ejercicio.create({nombre,color,preparacion,ejecucion,detalles,idCategoria,idMusculoPrincipal,idMusculoSecundario,idEquipamiento,idPerfil,estado:1});
         res.json(ejercicio);
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })
@@ -56,7 +55,6 @@ export const putEjercicio= async (req:Request ,res:Response)=>{
         await ejercicio.update({nombre,color,preparacion,ejecucion,detalles,idCategoria,idMusculoPrincipal,idMusculoSecundario,idEquipamiento,idPerfil,estado});
         res.json({msg: 'Ejercicio actualizado perfectamente'});
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })
