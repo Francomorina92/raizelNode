@@ -41,13 +41,13 @@ const getUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.getUsuario = getUsuario;
 const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Obtenemos los datos por el post
-    const { password, email, rol, img, nombre } = req.body;
+    const { password, email, img, nombre } = req.body;
     try {
         //Encriptar la contraseña
         const salt = bcryptjs_1.default.genSaltSync();
         const pass = bcryptjs_1.default.hashSync(password, salt);
         //Guardamos en BD
-        const usuario = yield usuario_1.default.create({ password: pass, email, rol, img, google: false, estado: 1 });
+        const usuario = yield usuario_1.default.create({ password: pass, email, rol: 'USER_ROLE', img, google: false, estado: 1 });
         if (!usuario) {
             res.status(500).json({
                 msg: 'Hable con el administrador'

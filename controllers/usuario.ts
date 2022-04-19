@@ -31,7 +31,7 @@ export const getUsuario= async(req:Request ,res:Response)=>{
 export const postUsuario= async (req:Request ,res:Response)=>{
 
     //Obtenemos los datos por el post
-    const {password,email,rol,img, nombre}=req.body;
+    const {password,email,img, nombre}=req.body;
     
     try {
         
@@ -39,7 +39,7 @@ export const postUsuario= async (req:Request ,res:Response)=>{
         const salt = bcryptjs.genSaltSync();
         const pass = bcryptjs.hashSync(password, salt);
         //Guardamos en BD
-        const usuario = await Usuario.create({password:pass,email,rol,img,google:false,estado:1});
+        const usuario = await Usuario.create({password:pass,email,rol:'USER_ROLE',img,google:false,estado:1});
         if (!usuario) {
             res.status(500).json({
                 msg: 'Hable con el administrador'
