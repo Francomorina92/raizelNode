@@ -36,7 +36,6 @@ export const postRutina= async (req:Request ,res:Response)=>{
         const rutina = await Rutina.create({nombre,idPerfil,estado:1});
         res.json(rutina);
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })
@@ -56,7 +55,6 @@ export const putRutina= async (req:Request ,res:Response)=>{
         await rutina.update({nombre,idPerfil,estado});
         res.json({msg: 'Rutina actualizada perfectamente'});
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })

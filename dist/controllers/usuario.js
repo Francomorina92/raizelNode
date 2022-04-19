@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteUsuario = exports.putUsuario = exports.postUsuario = exports.getUsuario = exports.getUsuarios = void 0;
 const usuario_1 = __importDefault(require("../models/usuario"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const perfil_1 = __importDefault(require("../models/perfil"));
 const getUsuarios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { limite = 5, desde = 1, orden = 'asc', campo = 'id' } = req.query;
     const usuarios = yield usuario_1.default.findAndCountAll({
@@ -40,17 +41,22 @@ const getUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.getUsuario = getUsuario;
 const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Obtenemos los datos por el post
-    const { password, email, rol, img } = req.body;
+    const { password, email, rol, img, nombre } = req.body;
     try {
         //Encriptar la contraseña
         const salt = bcryptjs_1.default.genSaltSync();
         const pass = bcryptjs_1.default.hashSync(password, salt);
         //Guardamos en BD
         const usuario = yield usuario_1.default.create({ password: pass, email, rol, img, google: false, estado: 1 });
-        res.json(usuario);
+        if (!usuario) {
+            res.status(500).json({
+                msg: 'Hable con el administrador'
+            });
+        }
+        const perfil = yield perfil_1.default.create({ nombre: nombre, estado: 1, idUsuario: usuario.id });
+        res.json({ usuario, perfil });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });
@@ -71,7 +77,6 @@ const putUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.json({ msg: 'Usuario actualizado perfectamente' });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });

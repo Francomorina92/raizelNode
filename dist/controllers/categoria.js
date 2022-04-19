@@ -46,7 +46,6 @@ const postCategoria = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.json(categoria);
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });
@@ -67,7 +66,6 @@ const putCategoria = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.json(categoria);
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });

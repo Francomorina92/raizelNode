@@ -46,7 +46,6 @@ const postCalificacion = (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.json(vCalificacion);
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });
@@ -67,7 +66,6 @@ const putCalificacion = (req, res) => __awaiter(void 0, void 0, void 0, function
         res.json({ msg: 'Calificacion actualizada perfectamente' });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });

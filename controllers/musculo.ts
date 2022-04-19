@@ -36,7 +36,6 @@ export const postMusculo= async (req:Request ,res:Response)=>{
         const musculo = await Musculo.create({nombre,estado:1});
         res.json(musculo);
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })
@@ -56,7 +55,6 @@ export const putMusculo= async (req:Request ,res:Response)=>{
         await musculo.update({nombre, estado});
         res.json(musculo);
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })

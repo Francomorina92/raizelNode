@@ -46,7 +46,6 @@ const postPerfil = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.json(perfil);
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });
@@ -67,7 +66,6 @@ const putPerfil = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json({ msg: 'perfil actualizado perfectamente' });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });

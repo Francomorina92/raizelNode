@@ -46,7 +46,6 @@ const postEquipamiento = (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.json(equipamiento);
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });
@@ -67,7 +66,6 @@ const putEquipamiento = (req, res) => __awaiter(void 0, void 0, void 0, function
         res.json(equipamiento);
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         });

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Usuario from '../models/usuario';
 import bcryptjs from "bcryptjs";
+import Perfil from "../models/perfil";
 
 
 export const getUsuarios= async (req:Request ,res:Response)=>{
@@ -30,7 +31,7 @@ export const getUsuario= async(req:Request ,res:Response)=>{
 export const postUsuario= async (req:Request ,res:Response)=>{
 
     //Obtenemos los datos por el post
-    const {password,email,rol,img}=req.body;
+    const {password,email,rol,img, nombre}=req.body;
     
     try {
         
@@ -39,9 +40,14 @@ export const postUsuario= async (req:Request ,res:Response)=>{
         const pass = bcryptjs.hashSync(password, salt);
         //Guardamos en BD
         const usuario = await Usuario.create({password:pass,email,rol,img,google:false,estado:1});
-        res.json(usuario);
+        if (!usuario) {
+            res.status(500).json({
+                msg: 'Hable con el administrador'
+            })
+        }
+        const perfil = await Perfil.create({nombre: nombre, estado: 1, idUsuario: (usuario as any).id})
+        res.json({usuario, perfil});
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })
@@ -62,7 +68,6 @@ export const putUsuario= async (req:Request ,res:Response)=>{
         await usuario.update({email,role,img});
         res.json({msg: 'Usuario actualizado perfectamente'});
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })

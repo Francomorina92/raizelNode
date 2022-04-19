@@ -36,7 +36,6 @@ export const postCalificacion= async (req:Request ,res:Response)=>{
         const vCalificacion = await Calificacion.create({mensaje,calificacion,idPerfil,idUsuario,estado:1});
         res.json(vCalificacion);
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })
@@ -56,7 +55,6 @@ export const putCalificacion= async (req:Request ,res:Response)=>{
         await vCalificacion.update({mensaje,calificacion,idPerfil,idUsuario,estado});
         res.json({msg: 'Calificacion actualizada perfectamente'});
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador'
         })
