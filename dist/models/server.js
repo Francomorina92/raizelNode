@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const auth_1 = __importDefault(require("../routes/auth"));
 const calificacion_1 = __importDefault(require("../routes/calificacion"));
 const categoria_1 = __importDefault(require("../routes/categoria"));
 const equipamiento_1 = __importDefault(require("../routes/equipamiento"));
@@ -36,6 +37,7 @@ class Server {
             rutinas: '/api/rutinas',
             usuarios: '/api/usuarios',
             ejercicios: '/api/ejercicios',
+            auth: '/api/auth'
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8000';
@@ -71,7 +73,8 @@ class Server {
             this.app.use(this.apiPaths.perfiles, perfil_1.default),
             this.app.use(this.apiPaths.rutinas, rutina_1.default),
             this.app.use(this.apiPaths.usuarios, usuario_1.default),
-            this.app.use(this.apiPaths.ejercicios, ejercicio_1.default);
+            this.app.use(this.apiPaths.ejercicios, ejercicio_1.default),
+            this.app.use(this.apiPaths.auth, auth_1.default);
     }
     listen() {
         this.app.listen(this.port, () => {

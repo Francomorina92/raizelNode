@@ -1,6 +1,6 @@
 import express,{Application} from 'express'
 import cors from "cors";
-
+import authRoutes from "../routes/auth";
 import calificacionRoutes from "../routes/calificacion";
 import categoriaRoutes from "../routes/categoria";
 import equipamientoRoutes from "../routes/equipamiento";
@@ -25,6 +25,7 @@ class Server {
         rutinas: '/api/rutinas',
         usuarios: '/api/usuarios',
         ejercicios: '/api/ejercicios',
+        auth: '/api/auth'
     }
     constructor() {
         this.app=express();
@@ -60,7 +61,8 @@ class Server {
         this.app.use(this.apiPaths.perfiles, perfilRoutes),
         this.app.use(this.apiPaths.rutinas, rutinaRoutes),
         this.app.use(this.apiPaths.usuarios, userRoutes),
-        this.app.use(this.apiPaths.ejercicios, ejercicioRoutes)
+        this.app.use(this.apiPaths.ejercicios, ejercicioRoutes),
+        this.app.use(this.apiPaths.auth, authRoutes)
     }
     listen(){
         this.app.listen(this.port,()=>{
