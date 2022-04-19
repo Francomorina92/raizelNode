@@ -64,7 +64,7 @@ const putCategoria = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             });
         }
         yield categoria.update({ nombre, estado });
-        res.json({ msg: 'Categoria actualizada perfectamente' });
+        res.json(categoria);
     }
     catch (error) {
         console.log(error);

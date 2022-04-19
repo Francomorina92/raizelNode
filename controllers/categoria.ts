@@ -53,7 +53,7 @@ export const putCategoria= async (req:Request ,res:Response)=>{
             })
         }
         await categoria.update({nombre, estado});
-        res.json({msg: 'Categoria actualizada perfectamente'});
+        res.json(categoria);
     } catch (error) {
         console.log(error);
         res.status(500).json({

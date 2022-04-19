@@ -54,7 +54,7 @@ export const putMusculo= async (req:Request ,res:Response)=>{
             })
         }
         await musculo.update({nombre, estado});
-        res.json({msg: 'Musculo actualizado perfectamente'});
+        res.json(musculo);
     } catch (error) {
         console.log(error);
         res.status(500).json({

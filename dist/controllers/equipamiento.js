@@ -64,7 +64,7 @@ const putEquipamiento = (req, res) => __awaiter(void 0, void 0, void 0, function
             });
         }
         yield equipamiento.update({ nombre, estado });
-        res.json({ msg: 'Equipamiento actualizado perfectamente' });
+        res.json(equipamiento);
     }
     catch (error) {
         console.log(error);

@@ -54,7 +54,7 @@ export const putEquipamiento= async (req:Request ,res:Response)=>{
             })
         }
         await equipamiento.update({nombre, estado});
-        res.json({msg: 'Equipamiento actualizado perfectamente'});
+        res.json(equipamiento);
     } catch (error) {
         console.log(error);
         res.status(500).json({

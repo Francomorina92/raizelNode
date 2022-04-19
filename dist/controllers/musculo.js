@@ -64,7 +64,7 @@ const putMusculo = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             });
         }
         yield musculo.update({ nombre, estado });
-        res.json({ msg: 'Musculo actualizado perfectamente' });
+        res.json(musculo);
     }
     catch (error) {
         console.log(error);
