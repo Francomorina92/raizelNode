@@ -110,7 +110,53 @@ const swaggerDefinition = {
                         format: 'date-time'
                     },
                 },
-            }
+            },
+            login: {
+                type: "object",
+                properties: {
+                    correo: {
+                        type: "string",
+                    },
+                    password: {
+                        type: "string",
+                    }
+                },
+            },
+            usuarioToken: {
+                type: "object",
+                properties: {
+                    id: {
+                        type: "integer",
+                    },
+                    token: {
+                        type: "string",
+                        default: 'tokenn'
+                    },
+                    email: {
+                        type: "string",
+                    },
+                    img: {
+                        type: "string",
+                    },
+                    rol: {
+                        type: "string",
+                    },
+                    google: {
+                        type: "boolean",
+                    },
+                    estado: {
+                        type: "boolean",
+                    },
+                    createdAt: {
+                        type: "string",
+                        format: 'date-time'
+                    },
+                    updatedAt: {
+                        type: "string",
+                        format: 'date-time'
+                    },
+                },
+            },
         },
         responses: {
             Unauthorized: {
@@ -129,7 +175,7 @@ const swaggerDefinition = {
         parameters: {
             token: {
                 in: 'header',
-                name: 'token',
+                name: 'x-token',
                 description: 'Token de autenticaciÃ³n en API.',
                 required: true,
                 schema: {
