@@ -41,7 +41,7 @@ const getUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.getUsuario = getUsuario;
 const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Obtenemos los datos por el post
-    const { password, email, img, nombre } = req.body;
+    const { password, email, img = '', nombre } = req.body;
     try {
         //Encriptar la contraseña
         const salt = bcryptjs_1.default.genSaltSync();
@@ -74,7 +74,7 @@ const putUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             });
         }
         yield usuario.update({ email, role, img });
-        res.json({ msg: 'Usuario actualizado perfectamente' });
+        res.json(usuario);
     }
     catch (error) {
         res.status(500).json({

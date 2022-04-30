@@ -24,6 +24,8 @@ const perfil_1 = __importDefault(require("../routes/perfil"));
 const rutina_1 = __importDefault(require("../routes/rutina"));
 const usuario_1 = __importDefault(require("../routes/usuario"));
 const ejercicio_1 = __importDefault(require("../routes/ejercicio"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const swaggeer_1 = __importDefault(require("../docs/swaggeer"));
 const conecction_1 = __importDefault(require("../db/conecction"));
 class Server {
     constructor() {
@@ -74,7 +76,8 @@ class Server {
             this.app.use(this.apiPaths.rutinas, rutina_1.default),
             this.app.use(this.apiPaths.usuarios, usuario_1.default),
             this.app.use(this.apiPaths.ejercicios, ejercicio_1.default),
-            this.app.use(this.apiPaths.auth, auth_1.default);
+            this.app.use(this.apiPaths.auth, auth_1.default),
+            this.app.use("/documentacion", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggeer_1.default));
     }
     listen() {
         this.app.listen(this.port, () => {

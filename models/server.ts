@@ -10,7 +10,8 @@ import perfilRoutes from "../routes/perfil";
 import rutinaRoutes from "../routes/rutina";
 import userRoutes from "../routes/usuario";
 import ejercicioRoutes from "../routes/ejercicio";
-
+import swaggerUI from "swagger-ui-express";
+import swaggerSetup from "../docs/swaggeer";
 import db from '../db/conecction';
 class Server {
     private app: Application;
@@ -62,7 +63,8 @@ class Server {
         this.app.use(this.apiPaths.rutinas, rutinaRoutes),
         this.app.use(this.apiPaths.usuarios, userRoutes),
         this.app.use(this.apiPaths.ejercicios, ejercicioRoutes),
-        this.app.use(this.apiPaths.auth, authRoutes)
+        this.app.use(this.apiPaths.auth, authRoutes),
+        this.app.use("/documentacion",swaggerUI.serve, swaggerUI.setup(swaggerSetup))
     }
     listen(){
         this.app.listen(this.port,()=>{
