@@ -204,6 +204,53 @@ const swaggerDefinition = {
                     }
                 },
             },
+            equipamientoGet: {
+                type: "object",
+                properties: {
+                    id: {
+                        type: "integer",
+                        default: 5
+                    },
+                    nombre: {
+                        type: "string",
+                        default: "Mancuerna"
+                    },
+                    estado: {
+                        type: "boolean",
+                        default: true
+                    },
+                    createdAt: {
+                        type: "string",
+                        format: 'date-time',
+                        default: "2022-04-04T00:36:27.000Z"
+                    },
+                    updatedAt: {
+                        type: "string",
+                        format: 'date-time',
+                        default: "2022-04-04T00:36:27.000Z"
+                    },
+                },
+            },
+            equipamientoPost: {
+                type: "object",
+                required: ["nombre"],
+                properties: {
+                    nombre: {
+                        type: "string",
+                    }
+                },
+            },
+            equipamientoPut: {
+                type: "object",
+                properties: {
+                    nombre: {
+                        type: "string",
+                    },
+                    estado: {
+                        type: "boolean",
+                    }
+                },
+            },
         },
         responses: {
             Unauthorized: {
