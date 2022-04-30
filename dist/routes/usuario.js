@@ -61,7 +61,7 @@ router.get('/', usuario_1.getUsuarios);
  *  get:
  *    tags:
  *    - Usuarios
- *    summary: Obtener suario
+ *    summary: Obtener usuario
  *    operationId: usuario
  *    parameters:
  *    - name: id
@@ -142,6 +142,31 @@ router.put('/:id', [
     (0, express_validator_1.check)('id', 'El id tiene que ser numerico').isInt(),
     validar_campos_1.default
 ], usuario_1.putUsuario);
+/**
+ * Post track
+ * @openapi
+ *    /usuarios/{id}:
+ *  delete:
+ *    tags:
+ *    - Usuarios
+ *    summary: Eliminar usuario
+ *    operationId: usuarioDelete
+ *    parameters:
+ *    - $ref: '#/components/parameters/token'
+ *    - name: id
+ *      in: path
+ *      description: Id del usuario que queremos eliminar
+ *      required: true
+ *      schema:
+ *        type: string
+ *    responses:
+ *      200:
+ *        description: successful operation
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/usuarioGet'
+ */
 router.delete('/:id', [
     validar_jwt_1.default,
     validar_rol_1.default,

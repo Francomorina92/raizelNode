@@ -3,7 +3,7 @@ import Musculo from '../models/musculo';
 
 
 export const getMusculos= async (req:Request ,res:Response)=>{
-    const {limite = 5,desde = 0,orden = 'asc',campo = 'nombre'}= req.params; 
+    const {limite = 5,desde = 0,orden = 'asc',campo = 'nombre'}= req.query; 
     
     const musculos= await Musculo.findAndCountAll(
         {

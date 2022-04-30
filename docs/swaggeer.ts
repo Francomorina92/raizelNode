@@ -153,6 +153,53 @@ const swaggerDefinition: OAS3Definition={
               },
             },
           },
+          categoriaGet: {
+            type: "object",
+            properties: {
+              id: {
+                type: "integer",
+                default: 5
+              },
+              nombre: {
+                type: "string",
+                default: "Regular"
+              },
+              estado: {
+                type: "boolean",
+                default: true
+              },
+              createdAt: {
+                type: "string",
+                format: 'date-time',
+                default: "2022-04-04T00:36:27.000Z"
+              },
+              updatedAt: {
+                type: "string",
+                format: 'date-time',
+                default: "2022-04-04T00:36:27.000Z"
+              },
+            },
+          },
+          categoriaPost: {
+            type: "object",
+            required: ["nombre"],
+            properties: {
+              nombre: {
+                type: "string",
+              }
+            },
+          },
+          categoriaPut: {
+            type: "object",
+            properties: {
+              nombre: {
+                type: "string",
+              },
+              estado: {
+                type: "boolean",
+              }
+            },
+          },
         },
         responses:{
           Unauthorized:{

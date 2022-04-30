@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteMusculo = exports.putMusculo = exports.postMusculo = exports.getMusculo = exports.getMusculos = void 0;
 const musculo_1 = __importDefault(require("../models/musculo"));
 const getMusculos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 5, desde = 0, orden = 'asc', campo = 'nombre' } = req.params;
+    const { limite = 5, desde = 0, orden = 'asc', campo = 'nombre' } = req.query;
     const musculos = yield musculo_1.default.findAndCountAll({
         limit: Number(limite),
         offset: Number(desde),
