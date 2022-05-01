@@ -372,6 +372,65 @@ const swaggerDefinition: OAS3Definition={
               }
             },
           },
+          likeGet: {
+            type: "object",
+            properties: {
+              id: {
+                type: "integer",
+                default: 5
+              },
+              idPerfil: {
+                type: "integer",
+                default: 1
+              },
+              idRutina: {
+                type: "integer",
+                default: 2
+              },
+              estado: {
+                type: "boolean",
+                default: true
+              },
+              createdAt: {
+                type: "string",
+                format: 'date-time',
+                default: "2022-04-04T00:36:27.000Z"
+              },
+              updatedAt: {
+                type: "string",
+                format: 'date-time',
+                default: "2022-04-04T00:36:27.000Z"
+              },
+            },
+          },
+          likePost: {
+            type: "object",
+            required: ["idUsuario","idPerfil"],
+            properties: {
+              idPerfil: {
+                type: "integer",
+              },
+              idUsuario: {
+                type: "integer",
+              }
+            },
+          },
+          likePut: {
+            type: "object",
+            required: ["idUsuario","idPerfil","estado"],
+            properties: {
+              idPerfil: {
+                type: "integer",
+              },
+              idUsuario: {
+                type: "integer",
+              },
+              estado: {
+                type: "boolean",
+                default: true
+              },
+            },
+          },
         },
         responses:{
           Unauthorized:{

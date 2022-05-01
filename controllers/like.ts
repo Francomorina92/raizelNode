@@ -1,17 +1,16 @@
 import { Request, Response } from "express";
 import Like from '../models/like';
-
+const { QueryTypes } = require('sequelize');
+import db from "../db/conecction";
 
 export const getLikes= async (req:Request ,res:Response)=>{
-    const {limite = 5,desde = 1,orden = 'desc',campo = 'updatedAt'}= req.query; 
-    
-    const likes= await Like.findAndCountAll(
-        {
-            limit:Number(limite),
-            offset:Number(desde),
-            order: [[String(campo),String(orden)]]
-        }
-    );
+    const {limite = 5,desde = 1,orden = 'desc',campo = 'updatedAt', rutina = 1}= req.query; 
+    const rows = await db.query('call getLikes(:rutina, :limite, :desde, :orden, :campo)', { 
+        replacements: { rutina, limite, desde, orden, campo }, 
+        model: Like,
+        type: QueryTypes.SELECT
+    });
+    const likes = rows[0];
     res.json({likes});
 }
 export const getLike= async(req:Request ,res:Response)=>{
