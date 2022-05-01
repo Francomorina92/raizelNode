@@ -39,10 +39,10 @@ const getPerfil = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getPerfil = getPerfil;
 const postPerfil = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Obtenemos los datos por el post
-    const { nombre, idUsuario, apellido, facebook, twitter, instagram, web } = req.body;
+    const { nombre, idUsuario } = req.body;
     try {
         //Guardamos en BD
-        const perfil = yield perfil_1.default.create({ nombre, idUsuario, apellido, facebook, twitter, instagram, web, estado: 1 });
+        const perfil = yield perfil_1.default.create({ nombre, idUsuario, estado: 1 });
         res.json(perfil);
     }
     catch (error) {

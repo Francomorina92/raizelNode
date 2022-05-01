@@ -29,11 +29,11 @@ export const getPerfil= async(req:Request ,res:Response)=>{
 export const postPerfil= async (req:Request ,res:Response)=>{
 
     //Obtenemos los datos por el post
-    const {nombre,idUsuario,apellido,facebook,twitter,instagram,web}=req.body;
+    const {nombre,idUsuario}=req.body;
     
     try {
         //Guardamos en BD
-        const perfil = await Perfil.create({nombre,idUsuario,apellido,facebook,twitter,instagram,web,estado:1});
+        const perfil = await Perfil.create({nombre,idUsuario,estado:1});
         res.json(perfil);
     } catch (error) {
         res.status(500).json({

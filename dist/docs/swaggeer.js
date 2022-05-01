@@ -86,31 +86,6 @@ const swaggerDefinition = {
                     },
                 },
             },
-            perfilGet: {
-                type: "object",
-                properties: {
-                    id: {
-                        type: "integer",
-                    },
-                    nombre: {
-                        type: "string",
-                    },
-                    estado: {
-                        type: "boolean",
-                    },
-                    idUsuario: {
-                        type: "integer",
-                    },
-                    createdAt: {
-                        type: "string",
-                        format: 'date-time'
-                    },
-                    updatedAt: {
-                        type: "string",
-                        format: 'date-time'
-                    },
-                },
-            },
             login: {
                 type: "object",
                 properties: {
@@ -433,6 +408,105 @@ const swaggerDefinition = {
                         type: "boolean",
                         default: true
                     },
+                },
+            },
+            perfilGet: {
+                type: "object",
+                properties: {
+                    id: {
+                        type: "integer",
+                        default: 5
+                    },
+                    idUsuario: {
+                        type: "integer",
+                        default: 1
+                    },
+                    nombre: {
+                        type: "string",
+                        default: "Franco"
+                    },
+                    apellido: {
+                        type: "string",
+                        default: "Morina"
+                    },
+                    facebook: {
+                        type: "string",
+                        default: "www.facebook.com"
+                    },
+                    twitter: {
+                        type: "string",
+                        default: "www.twitter.com"
+                    },
+                    instagram: {
+                        type: "string",
+                        default: "www.instagram.com"
+                    },
+                    web: {
+                        type: "string",
+                        default: "www.francomorina.com.ar"
+                    },
+                    estado: {
+                        type: "boolean",
+                        default: true
+                    },
+                    createdAt: {
+                        type: "string",
+                        format: 'date-time',
+                        default: "2022-04-04T00:36:27.000Z"
+                    },
+                    updatedAt: {
+                        type: "string",
+                        format: 'date-time',
+                        default: "2022-04-04T00:36:27.000Z"
+                    },
+                },
+            },
+            perfilPost: {
+                type: "object",
+                required: ["idUsuario", "nombre"],
+                properties: {
+                    nombre: {
+                        type: "string",
+                    },
+                    idUsuario: {
+                        type: "integer",
+                    }
+                },
+            },
+            perfilPut: {
+                type: "object",
+                required: ["idUsuario", "nombre"],
+                properties: {
+                    nombre: {
+                        type: "string",
+                    },
+                    apellido: {
+                        type: "string",
+                        default: "Morina"
+                    },
+                    facebook: {
+                        type: "string",
+                        default: "www.facebook.com"
+                    },
+                    twitter: {
+                        type: "string",
+                        default: "www.twitter.com"
+                    },
+                    instagram: {
+                        type: "string",
+                        default: "www.instagram.com"
+                    },
+                    web: {
+                        type: "string",
+                        default: "www.francomorina.com.ar"
+                    },
+                    estado: {
+                        type: "boolean",
+                        default: true
+                    },
+                    idUsuario: {
+                        type: "integer",
+                    }
                 },
             },
         },
