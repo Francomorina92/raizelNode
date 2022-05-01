@@ -136,7 +136,7 @@ router.post('/', [
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/categoriaGet'
+ *              $ref: '#/components/schemas/musculoGet'
  */
 router.put('/:id', [
     (0, express_validator_1.check)('id', 'El id tiene que ser numerico').isInt(),
