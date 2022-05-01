@@ -1,17 +1,27 @@
 import { Request, Response } from "express";
 import Rutina from '../models/rutina';
-
+const { QueryTypes } = require('sequelize');
+import db from "../db/conecction";
 
 export const getRutinas= async (req:Request ,res:Response)=>{
-    const {limite = 5,desde = 1,orden = 'asc',campo = 'nombre'}= req.query; 
-    
-    const rutinas= await Rutina.findAndCountAll(
-        {
-            limit:Number(limite),
-            offset:Number(desde),
-            order: [[String(campo),String(orden)]]
-        }
-    );
+    const {limite = 5,desde = 1,orden = 'asc',campo = 'nombre', perfil = 0}= req.query; 
+    let rutinas = null;
+    if (perfil!=0) {
+        const rows = await db.query('call getRutinas(:perfil, :limite, :desde, :orden, :campo)', { 
+            replacements: { perfil, limite, desde, orden, campo }, 
+            model: Rutina,
+            type: QueryTypes.SELECT
+        });
+        rutinas = rows[0];
+    }else{
+        rutinas = await Rutina.findAndCountAll(
+            {
+                limit:Number(limite),
+                offset:Number(desde),
+                order: [[String(campo),String(orden)]]
+            }
+        );
+    }
     res.json({rutinas});
 }
 export const getRutina= async(req:Request ,res:Response)=>{

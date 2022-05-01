@@ -505,6 +505,64 @@ const swaggerDefinition: OAS3Definition={
               }
             },
           },
+          rutinaGet: {
+            type: "object",
+            properties: {
+              id: {
+                type: "integer",
+                default: 5
+              },
+              idPerfil: {
+                type: "integer",
+                default: 1
+              },
+              nombre: {
+                type: "string",
+                default: "nombre rutina"
+              },
+              estado: {
+                type: "boolean",
+                default: true
+              },
+              createdAt: {
+                type: "string",
+                format: 'date-time',
+                default: "2022-04-04T00:36:27.000Z"
+              },
+              updatedAt: {
+                type: "string",
+                format: 'date-time',
+                default: "2022-04-04T00:36:27.000Z"
+              },
+            },
+          },
+          rutinaPost: {
+            type: "object",
+            required: ["idPerfil","nombre"],
+            properties: {
+              nombre: {
+                type: "string",
+              },
+              idPerfil: {
+                type: "integer",
+              }
+            },
+          },
+          rutinaPut: {
+            type: "object",
+            required: ["idPerfil","nombre","estado"],
+            properties: {
+              nombre: {
+                type: "string",
+              },
+              idPerfil: {
+                type: "integer",
+              },
+              estado: {
+                type: "boolean",
+              }
+            },
+          },
         },
         responses:{
           Unauthorized:{
