@@ -3,7 +3,7 @@ import Equipamiento from '../models/equipamiento';
 
 
 export const getEquipamientos= async (req:Request ,res:Response)=>{
-    const {limite = 5,desde = 0,orden = 'asc',campo = 'nombre'}= req.params; 
+    const {limite = 5,desde = 0,orden = 'asc',campo = 'nombre'}= req.query; 
     
     const equipamientos= await Equipamiento.findAndCountAll(
         {

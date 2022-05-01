@@ -14,13 +14,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteRutina = exports.putRutina = exports.postRutina = exports.getRutina = exports.getRutinas = void 0;
 const rutina_1 = __importDefault(require("../models/rutina"));
+const { QueryTypes } = require('sequelize');
+const conecction_1 = __importDefault(require("../db/conecction"));
 const getRutinas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 5, desde = 1, orden = 'asc', campo = 'nombre' } = req.query;
-    const rutinas = yield rutina_1.default.findAndCountAll({
-        limit: Number(limite),
-        offset: Number(desde),
-        order: [[String(campo), String(orden)]]
-    });
+    const { limite = 5, desde = 1, orden = 'asc', campo = 'nombre', perfil = 0 } = req.query;
+    let rutinas = null;
+    if (perfil != 0) {
+        const rows = yield conecction_1.default.query('call getRutinas(:perfil, :limite, :desde, :orden, :campo)', {
+            replacements: { perfil, limite, desde, orden, campo },
+            model: rutina_1.default,
+            type: QueryTypes.SELECT
+        });
+        rutinas = rows[0];
+    }
+    else {
+        rutinas = yield rutina_1.default.findAndCountAll({
+            limit: Number(limite),
+            offset: Number(desde),
+            order: [[String(campo), String(orden)]]
+        });
+    }
     res.json({ rutinas });
 });
 exports.getRutinas = getRutinas;

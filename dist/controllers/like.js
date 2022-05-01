@@ -14,13 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteLike = exports.putLike = exports.postLike = exports.getLike = exports.getLikes = void 0;
 const like_1 = __importDefault(require("../models/like"));
+const { QueryTypes } = require('sequelize');
+const conecction_1 = __importDefault(require("../db/conecction"));
 const getLikes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 5, desde = 1, orden = 'desc', campo = 'updatedAt' } = req.query;
-    const likes = yield like_1.default.findAndCountAll({
-        limit: Number(limite),
-        offset: Number(desde),
-        order: [[String(campo), String(orden)]]
+    const { limite = 5, desde = 1, orden = 'desc', campo = 'updatedAt', rutina = 1 } = req.query;
+    const rows = yield conecction_1.default.query('call getLikes(:rutina, :limite, :desde, :orden, :campo)', {
+        replacements: { rutina, limite, desde, orden, campo },
+        model: like_1.default,
+        type: QueryTypes.SELECT
     });
+    const likes = rows[0];
     res.json({ likes });
 });
 exports.getLikes = getLikes;

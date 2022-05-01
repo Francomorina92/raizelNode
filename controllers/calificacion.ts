@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import Calificacion from '../models/calificacion';
+const { QueryTypes } = require('sequelize');
+import db from "../db/conecction";
 
 
 export const getCalificaciones= async (req:Request ,res:Response)=>{
-    const {limite = 5,desde = 1,orden = 'desc',campo = 'updatedAt'}= req.query; 
-    
-    const calificaciones= await Calificacion.findAndCountAll(
-        {
-            limit:Number(limite),
-            offset:Number(desde),
-            order: [[String(campo),String(orden)]]
-        }
-    );
+    const {limite = 5,desde = 1,orden = 'desc',campo = 'updatedAt', perfil = 1}= req.query; 
+    const rows = await db.query('call getCalificaciones(:perfil, :limite, :desde, :orden, :campo)', { 
+        replacements: { perfil, limite, desde, orden, campo }, 
+        model: Calificacion,
+        type: QueryTypes.SELECT
+      });
+      const calificaciones = rows[0];
     res.json({calificaciones});
 }
 export const getCalificacion= async(req:Request ,res:Response)=>{

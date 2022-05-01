@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCategoria = exports.putCategoria = exports.postCategoria = exports.getCategoria = exports.getCategorias = void 0;
 const categoria_1 = __importDefault(require("../models/categoria"));
 const getCategorias = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 5, desde = 0, orden = 'asc', campo = 'nombre' } = req.params;
+    const { limite = 5, desde = 0, orden = 'asc', campo = 'nombre' } = req.query;
     const categorias = yield categoria_1.default.findAndCountAll({
         limit: Number(limite),
         offset: Number(desde),

@@ -31,7 +31,7 @@ export const getUsuario= async(req:Request ,res:Response)=>{
 export const postUsuario= async (req:Request ,res:Response)=>{
 
     //Obtenemos los datos por el post
-    const {password,email,img, nombre}=req.body;
+    const {password,email,img='', nombre}=req.body;
     
     try {
         
@@ -66,7 +66,7 @@ export const putUsuario= async (req:Request ,res:Response)=>{
             })
         }
         await usuario.update({email,role,img});
-        res.json({msg: 'Usuario actualizado perfectamente'});
+        res.json(usuario);
     } catch (error) {
         res.status(500).json({
             msg: 'Hable con el administrador'

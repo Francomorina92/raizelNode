@@ -14,13 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCalificacion = exports.putCalificacion = exports.postCalificacion = exports.getCalificacion = exports.getCalificaciones = void 0;
 const calificacion_1 = __importDefault(require("../models/calificacion"));
+const { QueryTypes } = require('sequelize');
+const conecction_1 = __importDefault(require("../db/conecction"));
 const getCalificaciones = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 5, desde = 1, orden = 'desc', campo = 'updatedAt' } = req.query;
-    const calificaciones = yield calificacion_1.default.findAndCountAll({
-        limit: Number(limite),
-        offset: Number(desde),
-        order: [[String(campo), String(orden)]]
+    const { limite = 5, desde = 1, orden = 'desc', campo = 'updatedAt', perfil = 1 } = req.query;
+    const rows = yield conecction_1.default.query('call getCalificaciones(:perfil, :limite, :desde, :orden, :campo)', {
+        replacements: { perfil, limite, desde, orden, campo },
+        model: calificacion_1.default,
+        type: QueryTypes.SELECT
     });
+    const calificaciones = rows[0];
     res.json({ calificaciones });
 });
 exports.getCalificaciones = getCalificaciones;
