@@ -294,6 +294,84 @@ const swaggerDefinition: OAS3Definition={
               }
             },
           },
+          calificacionGet: {
+            type: "object",
+            properties: {
+              id: {
+                type: "integer",
+                default: 5
+              },
+              mensaje: {
+                type: "string",
+                default: "Excelente rutina"
+              },
+              calificacion: {
+                type: "integer",
+                default: 5
+              },
+              idPerfil: {
+                type: "integer",
+                default: 1
+              },
+              idUsuario: {
+                type: "integer",
+                default: 2
+              },
+              estado: {
+                type: "boolean",
+                default: true
+              },
+              createdAt: {
+                type: "string",
+                format: 'date-time',
+                default: "2022-04-04T00:36:27.000Z"
+              },
+              updatedAt: {
+                type: "string",
+                format: 'date-time',
+                default: "2022-04-04T00:36:27.000Z"
+              },
+            },
+          },
+          calificacionPost: {
+            type: "object",
+            required: ["idUsuario","idPerfil","calificacion"],
+            properties: {
+              mensaje: {
+                type: "string",
+              },
+              idPerfil: {
+                type: "integer",
+              },
+              idUsuario: {
+                type: "integer",
+              },
+              calificacion: {
+                type: "integer",
+              }
+            },
+          },
+          calificacionPut: {
+            type: "object",
+            required: ["idUsuario","idPerfil","calificacion"],
+            properties: {
+              mensaje: {
+                type: "string",
+              },
+              idPerfil: {
+                type: "integer",
+              },
+              idUsuario: {
+                type: "integer",
+              },
+              calificacion: {
+                type: "integer",
+              },
+              estado: {
+                type: "boolean",
+              }
+            },
+          },
         },
         responses:{
           Unauthorized:{
