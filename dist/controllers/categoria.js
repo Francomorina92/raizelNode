@@ -14,13 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCategoria = exports.putCategoria = exports.postCategoria = exports.getCategoria = exports.getCategorias = void 0;
 const categoria_1 = __importDefault(require("../models/categoria"));
+const { QueryTypes } = require('sequelize');
+const conecction_1 = __importDefault(require("../db/conecction"));
 const getCategorias = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 5, desde = 0, orden = 'asc', campo = 'nombre' } = req.query;
-    const categorias = yield categoria_1.default.findAndCountAll({
-        limit: Number(limite),
-        offset: Number(desde),
-        order: [[String(campo), String(orden)]]
+    const { limite = 5, desde = 0, orden = 'asc', campo = 'nombre', filtro = '' } = req.query;
+    let categorias = null;
+    const rows = yield conecction_1.default.query('call getCategorias(:filtro, :limite, :desde, :orden, :campo)', {
+        replacements: { filtro, limite, desde, orden, campo },
+        model: categoria_1.default,
+        type: QueryTypes.SELECT
     });
+    categorias = rows[0];
     res.json({ categorias });
 });
 exports.getCategorias = getCategorias;

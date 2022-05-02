@@ -1,17 +1,18 @@
 import { Request, Response } from "express";
 import Equipamiento from '../models/equipamiento';
-
+const { QueryTypes } = require('sequelize');
+import db from "../db/conecction";
 
 export const getEquipamientos= async (req:Request ,res:Response)=>{
-    const {limite = 5,desde = 0,orden = 'asc',campo = 'nombre'}= req.query; 
+    const {limite = 5,desde = 0,orden = 'asc',campo = 'nombre', filtro = ''}= req.query; 
+    let equipamientos=null; 
     
-    const equipamientos= await Equipamiento.findAndCountAll(
-        {
-            limit:Number(limite),
-            offset:Number(desde),
-            order: [[String(campo),String(orden)]]
-        }
-    );
+    const rows = await db.query('call getEquipamientos(:filtro, :limite, :desde, :orden, :campo)', { 
+        replacements: { filtro, limite, desde, orden, campo }, 
+        model: Equipamiento,
+        type: QueryTypes.SELECT
+    });
+    equipamientos = rows[0];
     res.json({equipamientos});
 }
 export const getEquipamiento= async(req:Request ,res:Response)=>{
