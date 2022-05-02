@@ -1,17 +1,19 @@
 import { Request, Response } from "express";
 import Categoria from '../models/categoria';
-
+const { QueryTypes } = require('sequelize');
+import db from "../db/conecction";
 
 export const getCategorias= async (req:Request ,res:Response)=>{
-    const {limite = 5,desde = 0,orden = 'asc',campo = 'nombre'}= req.query; 
+    const {limite = 5,desde = 0,orden = 'asc',campo = 'nombre', filtro = ''}= req.query;
+    let categorias=null; 
     
-    const categorias= await Categoria.findAndCountAll(
-        {
-            limit:Number(limite),
-            offset:Number(desde),
-            order: [[String(campo),String(orden)]]
-        }
-    );
+    const rows = await db.query('call getCategorias(:filtro, :limite, :desde, :orden, :campo)', { 
+        replacements: { filtro, limite, desde, orden, campo }, 
+        model: Categoria,
+        type: QueryTypes.SELECT
+    });
+    categorias = rows[0];
+    
     res.json({categorias});
 }
 export const getCategoria= async(req:Request ,res:Response)=>{

@@ -14,13 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteMusculo = exports.putMusculo = exports.postMusculo = exports.getMusculo = exports.getMusculos = void 0;
 const musculo_1 = __importDefault(require("../models/musculo"));
+const { QueryTypes } = require('sequelize');
+const conecction_1 = __importDefault(require("../db/conecction"));
 const getMusculos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 5, desde = 0, orden = 'asc', campo = 'nombre' } = req.query;
-    const musculos = yield musculo_1.default.findAndCountAll({
-        limit: Number(limite),
-        offset: Number(desde),
-        order: [[String(campo), String(orden)]]
+    const { limite = 5, desde = 0, orden = 'asc', campo = 'nombre', filtro = '' } = req.query;
+    let musculos = null;
+    const rows = yield conecction_1.default.query('call getMusculos(:filtro, :limite, :desde, :orden, :campo)', {
+        replacements: { filtro, limite, desde, orden, campo },
+        model: musculo_1.default,
+        type: QueryTypes.SELECT
     });
+    musculos = rows[0];
     res.json({ musculos });
 });
 exports.getMusculos = getMusculos;

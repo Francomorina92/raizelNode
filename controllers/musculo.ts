@@ -1,17 +1,18 @@
 import { Request, Response } from "express";
 import Musculo from '../models/musculo';
-
+const { QueryTypes } = require('sequelize');
+import db from "../db/conecction";
 
 export const getMusculos= async (req:Request ,res:Response)=>{
-    const {limite = 5,desde = 0,orden = 'asc',campo = 'nombre'}= req.query; 
+    const {limite = 5,desde = 0,orden = 'asc',campo = 'nombre', filtro = ''}= req.query; 
+    let musculos=null; 
     
-    const musculos= await Musculo.findAndCountAll(
-        {
-            limit:Number(limite),
-            offset:Number(desde),
-            order: [[String(campo),String(orden)]]
-        }
-    );
+    const rows = await db.query('call getMusculos(:filtro, :limite, :desde, :orden, :campo)', { 
+        replacements: { filtro, limite, desde, orden, campo }, 
+        model: Musculo,
+        type: QueryTypes.SELECT
+    });
+    musculos = rows[0];
     res.json({musculos});
 }
 export const getMusculo= async(req:Request ,res:Response)=>{
