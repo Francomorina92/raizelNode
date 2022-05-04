@@ -16,13 +16,24 @@ exports.DeleteUsuario = exports.putUsuario = exports.postUsuario = exports.getUs
 const usuario_1 = __importDefault(require("../models/usuario"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const perfil_1 = __importDefault(require("../models/perfil"));
+const { QueryTypes } = require('sequelize');
+const conecction_1 = __importDefault(require("../db/conecction"));
 const getUsuarios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 5, desde = 1, orden = 'asc', campo = 'id' } = req.query;
-    const usuarios = yield usuario_1.default.findAndCountAll({
-        limit: Number(limite),
-        offset: Number(desde),
-        order: [[String(campo), String(orden)]]
+    const { limite = 5, desde = 1, orden = 'asc', campo = 'id', filtro = '' } = req.query;
+    let usuarios = null;
+    const rows = yield conecction_1.default.query('call getUsuarios(:filtro, :limite, :desde, :orden, :campo)', {
+        replacements: { filtro, limite, desde, orden, campo },
+        model: usuario_1.default,
+        type: QueryTypes.SELECT
     });
+    usuarios = rows[0];
+    /* const usuarios= await Usuario.findAndCountAll(
+        {
+            limit:Number(limite),
+            offset:Number(desde),
+            order: [[String(campo),String(orden)]]
+        }
+    ); */
     res.json({ usuarios });
 });
 exports.getUsuarios = getUsuarios;
