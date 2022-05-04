@@ -2,18 +2,26 @@ import { Request, Response } from "express";
 import Usuario from '../models/usuario';
 import bcryptjs from "bcryptjs";
 import Perfil from "../models/perfil";
-
+const { QueryTypes } = require('sequelize');
+import db from "../db/conecction";
 
 export const getUsuarios= async (req:Request ,res:Response)=>{
-    const {limite = 5,desde = 1,orden = 'asc',campo = 'id'}= req.query; 
+    const {limite = 5,desde = 1,orden = 'asc',campo = 'id', filtro = ''}= req.query; 
+    let usuarios=null; 
     
-    const usuarios= await Usuario.findAndCountAll(
+    const rows = await db.query('call getUsuarios(:filtro, :limite, :desde, :orden, :campo)', { 
+        replacements: { filtro, limite, desde, orden, campo }, 
+        model: Usuario,
+        type: QueryTypes.SELECT
+    });
+    usuarios = rows[0];
+    /* const usuarios= await Usuario.findAndCountAll(
         {
             limit:Number(limite),
             offset:Number(desde),
             order: [[String(campo),String(orden)]]
         }
-    );
+    ); */
     res.json({usuarios});
 }
 export const getUsuario= async(req:Request ,res:Response)=>{
