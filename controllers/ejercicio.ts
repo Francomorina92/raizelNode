@@ -1,17 +1,18 @@
 import { Request, Response } from "express";
 import Ejercicio from '../models/ejercicio';
-
+const { QueryTypes } = require('sequelize');
+import db from "../db/conecction";
 
 export const getEjercicios= async (req:Request ,res:Response)=>{
-    const {limite = 5,desde = 1,orden = 'desc',campo = 'nombre'}= req.query; 
+    const {limite = 5,desde = 1,orden = 'desc',campo = 'nombre', filtro = '', id = 2}= req.query; 
+    let ejercicios=null;     
     
-    const ejercicios= await Ejercicio.findAndCountAll(
-        {
-            limit:Number(limite),
-            offset:Number(desde),
-            order: [[String(campo),String(orden)]]
-        }
-    );
+    const rows = await db.query('call getEjercicios(:filtro, :id, :limite, :desde, :orden, :campo)', { 
+        replacements: { filtro, id, limite, desde, orden, campo }, 
+        model: Ejercicio,
+        type: QueryTypes.SELECT
+    });
+    ejercicios = rows[0];
     res.json({ejercicios});
 }
 export const getEjercicio= async(req:Request ,res:Response)=>{
@@ -53,7 +54,7 @@ export const putEjercicio= async (req:Request ,res:Response)=>{
             })
         }
         await ejercicio.update({nombre,color,preparacion,ejecucion,detalles,idCategoria,idMusculoPrincipal,idMusculoSecundario,idEquipamiento,idPerfil,estado});
-        res.json({msg: 'Ejercicio actualizado perfectamente'});
+        res.json(ejercicio);
     } catch (error) {
         res.status(500).json({
             msg: 'Hable con el administrador'

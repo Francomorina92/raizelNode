@@ -34,7 +34,7 @@ const Ejercicio= db.define('Ejercicios',{
     },
     estado: {
         type: DataTypes.BOOLEAN
-    },
+    }
 });
 
 export default Ejercicio;

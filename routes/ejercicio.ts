@@ -14,9 +14,7 @@ router.get('/:id',[
 router.post('/', [
     check('nombre','El nombre es obligatorio').not().isEmpty(),
     check('nombre','El nombre tiene que tener maximo 100 caracteres').isLength({ max:100 }),
-    check('color','El color tiene que tener maximo 13 caracteres').isLength({ max:13 }),
     check('preparacion','La preparacion tiene que tener maximo 500 caracteres').isLength({ max:500 }),
-    check('ejecucion','La ejecucion tiene que tener maximo 500 caracteres').isLength({ max:500 }),
     check('ejecucion','La ejecucion tiene que tener maximo 500 caracteres').isLength({ max:500 }),
     check('detalles','Los detalles tienen que tener maximo 500 caracteres').isLength({ max:500 }),
     check('idCategoria').custom(esCategoriaValida),
