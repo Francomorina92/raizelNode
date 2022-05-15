@@ -14,13 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteEjercicio = exports.putEjercicio = exports.postEjercicio = exports.getEjercicio = exports.getEjercicios = void 0;
 const ejercicio_1 = __importDefault(require("../models/ejercicio"));
+const { QueryTypes } = require('sequelize');
+const conecction_1 = __importDefault(require("../db/conecction"));
 const getEjercicios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 5, desde = 1, orden = 'desc', campo = 'nombre' } = req.query;
-    const ejercicios = yield ejercicio_1.default.findAndCountAll({
-        limit: Number(limite),
-        offset: Number(desde),
-        order: [[String(campo), String(orden)]]
+    const { limite = 5, desde = 1, orden = 'desc', campo = 'nombre', filtro = '', id = 2 } = req.query;
+    let ejercicios = null;
+    const rows = yield conecction_1.default.query('call getEjercicios(:filtro, :id, :limite, :desde, :orden, :campo)', {
+        replacements: { filtro, id, limite, desde, orden, campo },
+        model: ejercicio_1.default,
+        type: QueryTypes.SELECT
     });
+    ejercicios = rows[0];
     res.json({ ejercicios });
 });
 exports.getEjercicios = getEjercicios;
@@ -63,7 +67,7 @@ const putEjercicio = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             });
         }
         yield ejercicio.update({ nombre, color, preparacion, ejecucion, detalles, idCategoria, idMusculoPrincipal, idMusculoSecundario, idEquipamiento, idPerfil, estado });
-        res.json({ msg: 'Ejercicio actualizado perfectamente' });
+        res.json(ejercicio);
     }
     catch (error) {
         res.status(500).json({
