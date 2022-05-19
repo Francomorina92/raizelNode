@@ -2,7 +2,8 @@ import { Router } from "express";
 import { check } from "express-validator";
 import { deleteEquipamiento, getEquipamiento, getEquipamientos, postEquipamiento, putEquipamiento } from "../controllers/equipamiento";
 import validarCampos from "../middlewares/validar-campos";
-
+import validarJWT from "../middlewares/validar-jwt";
+import esAdminRol from "../middlewares/validar-rol";
 
 const router = Router();
 /**
@@ -51,7 +52,10 @@ const router = Router();
  *            schema:
  *              $ref: '#/components/schemas/equipamientoGet'
  */
-router.get('/',     getEquipamientos);
+router.get('/',[
+    validarJWT,
+    validarCampos
+],     getEquipamientos);
 /**
  * Post track
  * @openapi
@@ -77,6 +81,7 @@ router.get('/',     getEquipamientos);
  *              $ref: '#/components/schemas/equipamientoGet'
  */
 router.get('/:id',[
+    validarJWT,
     check('id').isInt(),
     validarCampos
 ],  getEquipamiento);
@@ -103,6 +108,8 @@ router.get('/:id',[
  *              $ref: '#/components/schemas/equipamientoGet'
  */
 router.post('/', [
+    validarJWT,
+    esAdminRol,
     check('nombre','El nombre es obligatorio').not().isEmpty(),
     validarCampos
 ],    postEquipamiento);
@@ -136,6 +143,8 @@ router.post('/', [
  *              $ref: '#/components/schemas/musculoGet'
  */
 router.put('/:id',[
+    validarJWT,
+    esAdminRol,
     check('id','El id tiene que ser numerico').isInt(),
     validarCampos
 ],  putEquipamiento);
@@ -165,6 +174,8 @@ router.put('/:id',[
  *              $ref: '#/components/schemas/equipamientoGet'
  */
 router.delete('/:id',[
+    validarJWT,
+    esAdminRol,
     check('id').isInt(),
     validarCampos
 ],  deleteEquipamiento);

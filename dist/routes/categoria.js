@@ -7,6 +7,8 @@ const express_1 = require("express");
 const express_validator_1 = require("express-validator");
 const categoria_1 = require("../controllers/categoria");
 const validar_campos_1 = __importDefault(require("../middlewares/validar-campos"));
+const validar_jwt_1 = __importDefault(require("../middlewares/validar-jwt"));
+const validar_rol_1 = __importDefault(require("../middlewares/validar-rol"));
 const router = (0, express_1.Router)();
 /**
  * Post track
@@ -54,7 +56,10 @@ const router = (0, express_1.Router)();
  *            schema:
  *              $ref: '#/components/schemas/categoriaGet'
  */
-router.get('/', categoria_1.getCategorias);
+router.get('/', [
+    validar_jwt_1.default,
+    validar_campos_1.default
+], categoria_1.getCategorias);
 /**
  * Post track
  * @openapi
@@ -106,6 +111,8 @@ router.get('/:id', [
  *              $ref: '#/components/schemas/categoriaGet'
  */
 router.post('/', [
+    validar_jwt_1.default,
+    validar_rol_1.default,
     (0, express_validator_1.check)('nombre', 'El nombre es obligatorio').not().isEmpty(),
     validar_campos_1.default
 ], categoria_1.postCategoria);
@@ -139,6 +146,8 @@ router.post('/', [
  *              $ref: '#/components/schemas/categoriaGet'
  */
 router.put('/:id', [
+    validar_jwt_1.default,
+    validar_rol_1.default,
     (0, express_validator_1.check)('id', 'El id tiene que ser numerico').isInt(),
     validar_campos_1.default
 ], categoria_1.putCategoria);
@@ -168,6 +177,8 @@ router.put('/:id', [
  *              $ref: '#/components/schemas/categoriaGet'
  */
 router.delete('/:id', [
+    validar_jwt_1.default,
+    validar_rol_1.default,
     (0, express_validator_1.check)('id').isInt(),
     validar_campos_1.default
 ], categoria_1.deleteCategoria);

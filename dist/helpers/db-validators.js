@@ -21,11 +21,17 @@ const musculo_1 = __importDefault(require("../models/musculo"));
 const equipamiento_1 = __importDefault(require("../models/equipamiento"));
 const categoria_1 = __importDefault(require("../models/categoria"));
 const esRoleValido = (rol = '') => __awaiter(void 0, void 0, void 0, function* () {
-    const existeRol = yield rol_1.default.findOne({
-        where: {
-            nombre: rol
-        }
-    });
+    let existeRol;
+    if (rol == '') {
+        existeRol = true;
+    }
+    else {
+        existeRol = yield rol_1.default.findOne({
+            where: {
+                nombre: rol
+            }
+        });
+    }
     if (!existeRol) {
         throw new Error(`El rol ${rol} no esta registrado en la BD`);
     }

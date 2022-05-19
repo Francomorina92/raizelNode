@@ -7,11 +7,16 @@ import Equipamiento from "../models/equipamiento";
 import Categoria from "../models/categoria";
 
 export const esRoleValido =  async(rol='')=>{
-    const existeRol= await Rol.findOne({
-        where:{
-            nombre: rol
-        }
-    });
+    let existeRol;
+    if (rol=='') {
+        existeRol = true;
+    }else{
+        existeRol= await Rol.findOne({
+            where:{
+                nombre: rol
+            }
+        });
+    }
     if (!existeRol) {
         throw new Error(`El rol ${rol} no esta registrado en la BD`);
     }

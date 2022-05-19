@@ -31,9 +31,10 @@ const router = (0, express_1.Router)();
  *              $ref: '#/components/schemas/usuarioToken'
  */
 router.post('/login', [
-    (0, express_validator_1.check)('correo', 'El correo es obligatorio').isEmail(),
+    (0, express_validator_1.check)('email', 'El email es obligatorio').isEmail(),
     (0, express_validator_1.check)('password', 'La contraseña es obligatoria').not().isEmpty(),
     validar_campos_1.default
 ], auth_1.login);
+router.post('/tokenValido', auth_1.tokenValido);
 exports.default = router;
 //# sourceMappingURL=auth.js.map

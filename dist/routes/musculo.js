@@ -7,6 +7,8 @@ const express_1 = require("express");
 const express_validator_1 = require("express-validator");
 const musculo_1 = require("../controllers/musculo");
 const validar_campos_1 = __importDefault(require("../middlewares/validar-campos"));
+const validar_jwt_1 = __importDefault(require("../middlewares/validar-jwt"));
+const validar_rol_1 = __importDefault(require("../middlewares/validar-rol"));
 const router = (0, express_1.Router)();
 /**
  * Post track
@@ -54,7 +56,10 @@ const router = (0, express_1.Router)();
  *            schema:
  *              $ref: '#/components/schemas/musculoGet'
  */
-router.get('/', musculo_1.getMusculos);
+router.get('/', [
+    validar_jwt_1.default,
+    validar_campos_1.default
+], musculo_1.getMusculos);
 /**
  * Post track
  * @openapi
@@ -80,6 +85,7 @@ router.get('/', musculo_1.getMusculos);
  *              $ref: '#/components/schemas/musculoGet'
  */
 router.get('/:id', [
+    validar_jwt_1.default,
     (0, express_validator_1.check)('id').isInt(),
     validar_campos_1.default
 ], musculo_1.getMusculo);
@@ -106,6 +112,8 @@ router.get('/:id', [
  *              $ref: '#/components/schemas/musculoGet'
  */
 router.post('/', [
+    validar_jwt_1.default,
+    validar_rol_1.default,
     (0, express_validator_1.check)('nombre', 'El nombre es obligatorio').not().isEmpty(),
     validar_campos_1.default
 ], musculo_1.postMusculo);
@@ -139,6 +147,8 @@ router.post('/', [
  *              $ref: '#/components/schemas/musculoGet'
  */
 router.put('/:id', [
+    validar_jwt_1.default,
+    validar_rol_1.default,
     (0, express_validator_1.check)('id', 'El id tiene que ser numerico').isInt(),
     validar_campos_1.default
 ], musculo_1.putMusculo);
@@ -168,6 +178,8 @@ router.put('/:id', [
  *              $ref: '#/components/schemas/musculoGet'
  */
 router.delete('/:id', [
+    validar_jwt_1.default,
+    validar_rol_1.default,
     (0, express_validator_1.check)('id').isInt(),
     validar_campos_1.default
 ], musculo_1.deleteMusculo);

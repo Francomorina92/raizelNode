@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import Usuario from "../models/usuario";
 
 const validarJWT =async (req: Request, res: Response, next: Function)=>{
-    const token=req.header('x-token');
+    const token=req.header('accessToken');
     if (!token) {
         return res.status(401).json({
             msg:'No hay token en la peticion'

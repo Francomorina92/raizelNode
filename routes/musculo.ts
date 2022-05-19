@@ -2,7 +2,8 @@ import { Router } from "express";
 import { check } from "express-validator";
 import { deleteMusculo, getMusculo, getMusculos, postMusculo, putMusculo } from "../controllers/musculo";
 import validarCampos from "../middlewares/validar-campos";
-
+import validarJWT from "../middlewares/validar-jwt";
+import esAdminRol from "../middlewares/validar-rol";
 
 const router = Router();
 /**
@@ -51,7 +52,10 @@ const router = Router();
  *            schema:
  *              $ref: '#/components/schemas/musculoGet'
  */
-router.get('/',     getMusculos);
+router.get('/',[
+    validarJWT,
+    validarCampos
+],     getMusculos);
 /**
  * Post track
  * @openapi
@@ -77,6 +81,7 @@ router.get('/',     getMusculos);
  *              $ref: '#/components/schemas/musculoGet'
  */
 router.get('/:id',[
+    validarJWT,
     check('id').isInt(),
     validarCampos
 ],  getMusculo);
@@ -103,6 +108,8 @@ router.get('/:id',[
  *              $ref: '#/components/schemas/musculoGet'
  */
 router.post('/', [
+    validarJWT,
+    esAdminRol,
     check('nombre','El nombre es obligatorio').not().isEmpty(),
     validarCampos
 ],    postMusculo);
@@ -136,6 +143,8 @@ router.post('/', [
  *              $ref: '#/components/schemas/musculoGet'
  */
 router.put('/:id',[
+    validarJWT,
+    esAdminRol,
     check('id','El id tiene que ser numerico').isInt(),
     validarCampos
 ],  putMusculo);
@@ -165,6 +174,8 @@ router.put('/:id',[
  *              $ref: '#/components/schemas/musculoGet'
  */
 router.delete('/:id',[
+    validarJWT,
+    esAdminRol,
     check('id').isInt(),
     validarCampos
 ],  deleteMusculo);
