@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const usuario_1 = __importDefault(require("../models/usuario"));
 const validarJWT = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.header('x-token');
+    const token = req.header('accessToken');
     if (!token) {
         return res.status(401).json({
             msg: 'No hay token en la peticion'

@@ -12,22 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = void 0;
+exports.tokenValido = exports.login = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const usuario_1 = __importDefault(require("../models/usuario"));
 const generar_jwt_1 = require("../helpers/generar-jwt");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { correo, password } = req.body;
+    const { email, password } = req.body;
     try {
         //Verificar si el mail existe
         const usuario = yield usuario_1.default.findOne({
             where: {
-                email: correo
+                email: email
             }
         });
         if (!usuario) {
             return res.status(400).json({
-                msg: 'El correo no es correcto'
+                msg: 'El email no es correcto'
             });
         }
         else if (!usuario.getDataValue('estado')) {
@@ -57,4 +58,40 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.login = login;
+const tokenValido = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.header('x-token');
+    if (!token) {
+        return res.status(401).json({
+            msg: 'No hay token en la peticion'
+        });
+    }
+    try {
+        //validar el token
+        const secretKey = process.env.SECRETORPRIVATEKEY || '';
+        const { uid } = jsonwebtoken_1.default.verify(token, secretKey);
+        req.uid = uid;
+        const user = yield usuario_1.default.findByPk(uid);
+        //Verificar si el user esta activo
+        if (!user) {
+            return res.status(404).json({
+                msg: `No existe un usuario con el id ${uid}`
+            });
+        }
+        if (!user.estado) {
+            return res.status(401).json({
+                msg: `El usuario con el id ${uid} no esta habilitado`
+            });
+        }
+        req.user = user;
+        res.json({
+            token: true
+        });
+    }
+    catch (error) {
+        res.status(401).json({
+            msg: 'Token no valido'
+        });
+    }
+});
+exports.tokenValido = tokenValido;
 //# sourceMappingURL=auth.js.map

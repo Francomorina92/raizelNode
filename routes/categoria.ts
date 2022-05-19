@@ -2,8 +2,8 @@ import { Router } from "express";
 import { check } from "express-validator";
 import { deleteCategoria, getCategoria, getCategorias, postCategoria, putCategoria } from "../controllers/categoria";
 import validarCampos from "../middlewares/validar-campos";
-
-
+import validarJWT from "../middlewares/validar-jwt";
+import esAdminRol from "../middlewares/validar-rol";
 const router = Router();
 /**
  * Post track
@@ -51,7 +51,10 @@ const router = Router();
  *            schema:
  *              $ref: '#/components/schemas/categoriaGet'
  */
-router.get('/',     getCategorias);
+router.get('/',[
+    validarJWT, 
+    validarCampos
+],     getCategorias);
 /**
  * Post track
  * @openapi
@@ -103,6 +106,8 @@ router.get('/:id',[
  *              $ref: '#/components/schemas/categoriaGet'
  */
 router.post('/', [
+    validarJWT,
+    esAdminRol,
     check('nombre','El nombre es obligatorio').not().isEmpty(),
     validarCampos
 ],    postCategoria);
@@ -136,6 +141,8 @@ router.post('/', [
  *              $ref: '#/components/schemas/categoriaGet'
  */
 router.put('/:id',[
+    validarJWT,
+    esAdminRol,
     check('id','El id tiene que ser numerico').isInt(),
     validarCampos
 ],  putCategoria);
@@ -165,6 +172,8 @@ router.put('/:id',[
  *              $ref: '#/components/schemas/categoriaGet'
  */
 router.delete('/:id',[
+    validarJWT,
+    esAdminRol,
     check('id').isInt(),
     validarCampos
 ],  deleteCategoria);

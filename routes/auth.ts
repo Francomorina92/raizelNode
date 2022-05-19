@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { login } from "../controllers/auth";
+import { login, tokenValido } from "../controllers/auth";
 import validarCampos from "../middlewares/validar-campos";
 
 const router = Router();
@@ -27,9 +27,10 @@ const router = Router();
  *              $ref: '#/components/schemas/usuarioToken'
  */
 router.post('/login',[
-    check('correo','El correo es obligatorio').isEmail(),
+    check('email','El email es obligatorio').isEmail(),
     check('password','La contraseña es obligatoria').not().isEmpty(),
     validarCampos
 ], login);
+router.post('/tokenValido', tokenValido);
 
 export default router;
