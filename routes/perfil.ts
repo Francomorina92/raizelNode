@@ -3,7 +3,7 @@ import { check } from "express-validator";
 import { deletePerfil, getPerfil, getPerfiles, postPerfil, putPerfil } from "../controllers/perfil";
 import validarCampos from "../middlewares/validar-campos";
 import {esUsuarioValido} from "../helpers/db-validators";
-
+import validarJWT from "../middlewares/validar-jwt";
 
 const router = Router();
 /**
@@ -78,6 +78,7 @@ router.get('/',     getPerfiles);
  *              $ref: '#/components/schemas/perfilGet'
  */
 router.get('/:id',[
+    validarJWT,
     check('id').isInt(),
     validarCampos  
 ],  getPerfil);
@@ -139,6 +140,7 @@ router.post('/', [
  *              $ref: '#/components/schemas/perfilGet'
  */
 router.put('/:id',[
+    validarJWT,
     check('id','El id tiene que ser numerico').isInt(),
     check('idUsuario','El idUsuario es obligatorio').not().isEmpty(),
     check('idUsuario').custom(esUsuarioValido),
@@ -170,6 +172,7 @@ router.put('/:id',[
  *              $ref: '#/components/schemas/perfilGet'
  */
 router.delete('/:id',[
+    validarJWT,
     check('id').isInt(),
     validarCampos
 ],  deletePerfil);

@@ -53,7 +53,7 @@ export const putPerfil= async (req:Request ,res:Response)=>{
             })
         }
         await perfil.update({nombre,idUsuario,apellido,facebook,twitter,instagram,web,estado});
-        res.json({msg: 'perfil actualizado perfectamente'});
+        res.json(perfil);
     } catch (error) {
         res.status(500).json({
             msg: 'Hable con el administrador'

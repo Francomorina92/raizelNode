@@ -8,6 +8,7 @@ const express_validator_1 = require("express-validator");
 const perfil_1 = require("../controllers/perfil");
 const validar_campos_1 = __importDefault(require("../middlewares/validar-campos"));
 const db_validators_1 = require("../helpers/db-validators");
+const validar_jwt_1 = __importDefault(require("../middlewares/validar-jwt"));
 const router = (0, express_1.Router)();
 /**
  * Post track
@@ -81,6 +82,7 @@ router.get('/', perfil_1.getPerfiles);
  *              $ref: '#/components/schemas/perfilGet'
  */
 router.get('/:id', [
+    validar_jwt_1.default,
     (0, express_validator_1.check)('id').isInt(),
     validar_campos_1.default
 ], perfil_1.getPerfil);
@@ -142,6 +144,7 @@ router.post('/', [
  *              $ref: '#/components/schemas/perfilGet'
  */
 router.put('/:id', [
+    validar_jwt_1.default,
     (0, express_validator_1.check)('id', 'El id tiene que ser numerico').isInt(),
     (0, express_validator_1.check)('idUsuario', 'El idUsuario es obligatorio').not().isEmpty(),
     (0, express_validator_1.check)('idUsuario').custom(db_validators_1.esUsuarioValido),
@@ -173,6 +176,7 @@ router.put('/:id', [
  *              $ref: '#/components/schemas/perfilGet'
  */
 router.delete('/:id', [
+    validar_jwt_1.default,
     (0, express_validator_1.check)('id').isInt(),
     validar_campos_1.default
 ], perfil_1.deletePerfil);

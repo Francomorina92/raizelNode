@@ -63,7 +63,7 @@ const putPerfil = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             });
         }
         yield perfil.update({ nombre, idUsuario, apellido, facebook, twitter, instagram, web, estado });
-        res.json({ msg: 'perfil actualizado perfectamente' });
+        res.json(perfil);
     }
     catch (error) {
         res.status(500).json({
