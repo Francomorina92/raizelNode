@@ -4,6 +4,9 @@ import bcryptjs from "bcryptjs";
 import Perfil from "../models/perfil";
 const { QueryTypes } = require('sequelize');
 import db from "../db/conecction";
+import { transporter } from "../mailer";
+import { generarJWTRegistro } from "../helpers/generar-jwt";
+import jwt from "jsonwebtoken";
 
 export const getUsuarios= async (req:Request ,res:Response)=>{
     const {limite = 5,desde = 1,orden = 'asc',campo = 'id', filtro = ''}= req.query; 
@@ -54,6 +57,33 @@ export const postUsuario= async (req:Request ,res:Response)=>{
             })
         }
         const perfil = await Perfil.create({nombre: nombre, estado: 1, idUsuario: (usuario as any).id})
+
+        //Generar el JWT
+        const token = await generarJWTRegistro(usuario.getDataValue('id'));
+        try {
+            // send mail with defined transport object
+            await transporter.sendMail({
+                from: '"Registro 👻" <raizel@gmail.com>', // sender address
+                to: (usuario as any).email, // list of receivers
+                subject: "Confirma tu dirección de correo electrónico en Raizel", // Subject line
+                //text: "Hello world?", // plain text body
+                html: `
+                Hola,${(perfil as any).nombre}
+
+                Acabas de crear una cuenta de Raizel. Para completar el registro, tan solo tienes que verificar tu dirección de correo electrónico. Pulsa en el botón de aquí abajo:
+                
+                COMPLETA TU REGISTRO
+                o copia y pega la siguiente URL en la barra de direcciones de tu navegador: <a href="https://192.168.0.196:8080/confirmacion/${token}">Confirmar Email</a>
+                ¡y comienza tu aventura ya!
+                
+                Saludos. El equipo de Raizel
+                `,
+            });
+        } catch (error) {
+            res.status(400).json({
+                msg:'Ocurrio un error al enviar el mail'
+            })
+        }
         res.json({usuario, perfil});
     } catch (error) {
         res.status(500).json({

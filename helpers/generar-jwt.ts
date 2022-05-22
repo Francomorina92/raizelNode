@@ -14,3 +14,18 @@ export const generarJWT = (uid = '')=>{
         })
     })
 }
+export const generarJWTRegistro = (uid = '')=>{
+    return new Promise((resolve,reject)=>{
+        const payload = { uid };
+        const secretkey = process.env.SECRETORPRIVATEKEYREGISTRO || '';
+        jwt.sign(payload, secretkey,{
+            expiresIn: '4h'
+        },(err, token)=>{
+            if (err) {
+                reject('No se pudo generar el token')
+            }else{
+                resolve(token);
+            }
+        })
+    })
+}
