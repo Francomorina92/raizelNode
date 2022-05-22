@@ -3,7 +3,7 @@ import { check } from "express-validator";
 import { deleteRutina, getRutina, getRutinas, postRutina, putRutina } from "../controllers/rutina";
 import validarCampos from "../middlewares/validar-campos";
 import {esPerfilValido} from "../helpers/db-validators";
-
+import validarJWT from "../middlewares/validar-jwt";
 const router = Router();
 /**
  * Post track
@@ -57,7 +57,10 @@ const router = Router();
  *            schema:
  *              $ref: '#/components/schemas/rutinaGet'
  */
-router.get('/',     getRutinas);
+router.get('/', [
+    validarJWT,
+    validarCampos
+],    getRutinas);
 /**
  * Post track
  * @openapi
@@ -109,8 +112,8 @@ router.get('/:id',[
  *              $ref: '#/components/schemas/rutinaGet'
  */
 router.post('/', [
+    validarJWT,
     check('nombre','El nombre es obligatorio').not().isEmpty(),
-    check('idPerfil').custom(esPerfilValido),
     validarCampos
 ],    postRutina);
 /**

@@ -16,16 +16,30 @@ exports.deleteRutina = exports.putRutina = exports.postRutina = exports.getRutin
 const rutina_1 = __importDefault(require("../models/rutina"));
 const { QueryTypes } = require('sequelize');
 const conecction_1 = __importDefault(require("../db/conecction"));
+const perfil_1 = __importDefault(require("../models/perfil"));
 const getRutinas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 5, desde = 1, orden = 'asc', campo = 'nombre', perfil = 0 } = req.query;
+    const { limite = 50, desde = 0, orden = 'asc', campo = 'nombre', perfil = 0 } = req.query;
+    if (!req.user) {
+        return res.status(500).json({
+            msg: ' Se quiere validar el token primero'
+        });
+    }
+    const { id } = req.user;
+    const per = yield perfil_1.default.findOne({
+        where: {
+            idUsuario: id
+        }
+    });
+    const idP = per.id;
     let rutinas = null;
     if (perfil != 0) {
-        const rows = yield conecction_1.default.query('call getRutinas(:perfil, :limite, :desde, :orden, :campo)', {
-            replacements: { perfil, limite, desde, orden, campo },
+        const rows = yield conecction_1.default.query('call getRutinas(:idP, :limite, :desde, :orden, :campo)', {
+            replacements: { idP, limite, desde, orden, campo },
             model: rutina_1.default,
             type: QueryTypes.SELECT
         });
         rutinas = rows[0];
+        console.log(rows[0]);
     }
     else {
         rutinas = yield rutina_1.default.findAndCountAll({
@@ -34,7 +48,7 @@ const getRutinas = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             order: [[String(campo), String(orden)]]
         });
     }
-    res.json({ rutinas });
+    res.json(rutinas);
 });
 exports.getRutinas = getRutinas;
 const getRutina = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -52,10 +66,21 @@ const getRutina = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getRutina = getRutina;
 const postRutina = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Obtenemos los datos por el post
-    const { nombre, idPerfil } = req.body;
+    const { nombre } = req.body;
+    if (!req.user) {
+        return res.status(500).json({
+            msg: ' Se quiere validar el token primero'
+        });
+    }
+    const { id } = req.user;
+    const perfil = yield perfil_1.default.findOne({
+        where: {
+            idUsuario: id
+        }
+    });
     try {
         //Guardamos en BD
-        const rutina = yield rutina_1.default.create({ nombre, idPerfil, estado: 1 });
+        const rutina = yield rutina_1.default.create({ nombre, idPerfil: perfil.id, estado: 1 });
         res.json(rutina);
     }
     catch (error) {

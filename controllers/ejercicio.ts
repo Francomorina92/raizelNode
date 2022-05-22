@@ -2,9 +2,21 @@ import { Request, Response } from "express";
 import Ejercicio from '../models/ejercicio';
 const { QueryTypes } = require('sequelize');
 import db from "../db/conecction";
+import Perfil from "../models/perfil";
 
 export const getEjercicios= async (req:Request ,res:Response)=>{
-    const {limite = 5,desde = 1,orden = 'desc',campo = 'nombre', filtro = '', id = 2}= req.query; 
+    const {limite = 5,desde = 1,orden = 'desc',campo = 'nombre', filtro = ''}= req.query; 
+    if (!(req as any).user) {
+        return res.status(500).json({
+            msg:' Se quiere validar el token primero'
+        })
+    } 
+    const per = await Perfil.findOne({
+        where:{
+            idUsuario: (req as any).user.id
+        }
+    }); 
+    const id = (per as any).id
     let ejercicios=null;     
     
     const rows = await db.query('call getEjercicios(:filtro, :id, :limite, :desde, :orden, :campo)', { 
@@ -30,11 +42,21 @@ export const getEjercicio= async(req:Request ,res:Response)=>{
 export const postEjercicio= async (req:Request ,res:Response)=>{
 
     //Obtenemos los datos por el post
-    const {nombre,color,preparacion,ejecucion,detalles,idCategoria,idMusculoPrincipal,idMusculoSecundario,idEquipamiento,idPerfil}=req.body;
-    
+    const {nombre,color,preparacion,ejecucion,detalles,idCategoria,idMusculoPrincipal,idMusculoSecundario,idEquipamiento}=req.body;
+    if (!(req as any).user) {
+        return res.status(500).json({
+            msg:' Se quiere validar el token primero'
+        })
+    } 
+    const per = await Perfil.findOne({
+        where:{
+            idUsuario: (req as any).user.id
+        }
+    }); 
+    const id = (per as any).id
     try {
         //Guardamos en BD
-        const ejercicio = await Ejercicio.create({nombre,color,preparacion,ejecucion,detalles,idCategoria,idMusculoPrincipal,idMusculoSecundario,idEquipamiento,idPerfil,estado:1});
+        const ejercicio = await Ejercicio.create({nombre,color,preparacion,ejecucion,detalles,idCategoria,idMusculoPrincipal,idMusculoSecundario,idEquipamiento,idPerfil: id,estado:1});
         res.json(ejercicio);
     } catch (error) {
         res.status(500).json({

@@ -8,6 +8,7 @@ const express_validator_1 = require("express-validator");
 const rutina_1 = require("../controllers/rutina");
 const validar_campos_1 = __importDefault(require("../middlewares/validar-campos"));
 const db_validators_1 = require("../helpers/db-validators");
+const validar_jwt_1 = __importDefault(require("../middlewares/validar-jwt"));
 const router = (0, express_1.Router)();
 /**
  * Post track
@@ -61,7 +62,10 @@ const router = (0, express_1.Router)();
  *            schema:
  *              $ref: '#/components/schemas/rutinaGet'
  */
-router.get('/', rutina_1.getRutinas);
+router.get('/', [
+    validar_jwt_1.default,
+    validar_campos_1.default
+], rutina_1.getRutinas);
 /**
  * Post track
  * @openapi
@@ -113,8 +117,8 @@ router.get('/:id', [
  *              $ref: '#/components/schemas/rutinaGet'
  */
 router.post('/', [
+    validar_jwt_1.default,
     (0, express_validator_1.check)('nombre', 'El nombre es obligatorio').not().isEmpty(),
-    (0, express_validator_1.check)('idPerfil').custom(db_validators_1.esPerfilValido),
     validar_campos_1.default
 ], rutina_1.postRutina);
 /**

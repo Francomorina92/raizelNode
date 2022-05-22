@@ -11,6 +11,9 @@ const Rutina= db.define('Rutinas',{
     estado: {
         type: DataTypes.BOOLEAN
     },
+    calificacion: {
+        type: DataTypes.DOUBLE
+    },
 });
 
 export default Rutina;

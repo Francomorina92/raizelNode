@@ -2,17 +2,33 @@ import { Request, Response } from "express";
 import Rutina from '../models/rutina';
 const { QueryTypes } = require('sequelize');
 import db from "../db/conecction";
+import Perfil from "../models/perfil";
 
 export const getRutinas= async (req:Request ,res:Response)=>{
-    const {limite = 5,desde = 1,orden = 'asc',campo = 'nombre', perfil = 0}= req.query; 
+    const {limite = 50,desde = 0,orden = 'asc',campo = 'nombre', perfil = 0}= req.query;
+    if (!(req as any).user) {
+        return res.status(500).json({
+            msg:' Se quiere validar el token primero'
+        })
+    }
+    const {id} = (req as any).user;
+    const per = await Perfil.findOne({
+        where:{
+            idUsuario: id
+        }
+    }); 
+    const idP = (per as any).id
+    
     let rutinas = null;
     if (perfil!=0) {
-        const rows = await db.query('call getRutinas(:perfil, :limite, :desde, :orden, :campo)', { 
-            replacements: { perfil, limite, desde, orden, campo }, 
+        const rows = await db.query('call getRutinas(:idP, :limite, :desde, :orden, :campo)', { 
+            replacements: { idP, limite, desde, orden, campo }, 
             model: Rutina,
             type: QueryTypes.SELECT
         });
         rutinas = rows[0];
+        
+    console.log(rows[0]);
     }else{
         rutinas = await Rutina.findAndCountAll(
             {
@@ -22,7 +38,7 @@ export const getRutinas= async (req:Request ,res:Response)=>{
             }
         );
     }
-    res.json({rutinas});
+    res.json(rutinas);
 }
 export const getRutina= async(req:Request ,res:Response)=>{
     const {id}=req.params;
@@ -39,11 +55,21 @@ export const getRutina= async(req:Request ,res:Response)=>{
 export const postRutina= async (req:Request ,res:Response)=>{
 
     //Obtenemos los datos por el post
-    const {nombre,idPerfil}=req.body;
-    
+    const {nombre}=req.body;
+    if (!(req as any).user) {
+        return res.status(500).json({
+            msg:' Se quiere validar el token primero'
+        })
+    }
+    const {id} = (req as any).user;
+    const perfil = await Perfil.findOne({
+        where:{
+            idUsuario: id
+        }
+    });
     try {
         //Guardamos en BD
-        const rutina = await Rutina.create({nombre,idPerfil,estado:1});
+        const rutina = await Rutina.create({nombre,idPerfil: (perfil as any).id, estado:1});
         res.json(rutina);
     } catch (error) {
         res.status(500).json({
