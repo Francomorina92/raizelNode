@@ -16,8 +16,20 @@ exports.deleteEjercicio = exports.putEjercicio = exports.postEjercicio = exports
 const ejercicio_1 = __importDefault(require("../models/ejercicio"));
 const { QueryTypes } = require('sequelize');
 const conecction_1 = __importDefault(require("../db/conecction"));
+const perfil_1 = __importDefault(require("../models/perfil"));
 const getEjercicios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 5, desde = 1, orden = 'desc', campo = 'nombre', filtro = '', id = 2 } = req.query;
+    const { limite = 5, desde = 1, orden = 'desc', campo = 'nombre', filtro = '' } = req.query;
+    if (!req.user) {
+        return res.status(500).json({
+            msg: ' Se quiere validar el token primero'
+        });
+    }
+    const per = yield perfil_1.default.findOne({
+        where: {
+            idUsuario: req.user.id
+        }
+    });
+    const id = per.id;
     let ejercicios = null;
     const rows = yield conecction_1.default.query('call getEjercicios(:filtro, :id, :limite, :desde, :orden, :campo)', {
         replacements: { filtro, id, limite, desde, orden, campo },
@@ -43,10 +55,21 @@ const getEjercicio = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.getEjercicio = getEjercicio;
 const postEjercicio = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Obtenemos los datos por el post
-    const { nombre, color, preparacion, ejecucion, detalles, idCategoria, idMusculoPrincipal, idMusculoSecundario, idEquipamiento, idPerfil } = req.body;
+    const { nombre, color, preparacion, ejecucion, detalles, idCategoria, idMusculoPrincipal, idMusculoSecundario, idEquipamiento } = req.body;
+    if (!req.user) {
+        return res.status(500).json({
+            msg: ' Se quiere validar el token primero'
+        });
+    }
+    const per = yield perfil_1.default.findOne({
+        where: {
+            idUsuario: req.user.id
+        }
+    });
+    const id = per.id;
     try {
         //Guardamos en BD
-        const ejercicio = yield ejercicio_1.default.create({ nombre, color, preparacion, ejecucion, detalles, idCategoria, idMusculoPrincipal, idMusculoSecundario, idEquipamiento, idPerfil, estado: 1 });
+        const ejercicio = yield ejercicio_1.default.create({ nombre, color, preparacion, ejecucion, detalles, idCategoria, idMusculoPrincipal, idMusculoSecundario, idEquipamiento, idPerfil: id, estado: 1 });
         res.json(ejercicio);
     }
     catch (error) {

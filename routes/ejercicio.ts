@@ -3,15 +3,20 @@ import { check } from "express-validator";
 import { deleteEjercicio, getEjercicio, getEjercicios, postEjercicio, putEjercicio } from "../controllers/ejercicio";
 import validarCampos from "../middlewares/validar-campos";
 import { esPerfilValido, esCategoriaValida, esEquipamientoValido, esMusculoValido } from '../helpers/db-validators';
+import validarJWT from "../middlewares/validar-jwt";
 
 const router = Router();
 
-router.get('/',     getEjercicios);
+router.get('/',[
+    validarJWT,
+    validarCampos
+],     getEjercicios);
 router.get('/:id',[
     check('id').isInt(),
     validarCampos
 ],  getEjercicio);
 router.post('/', [
+    validarJWT,
     check('nombre','El nombre es obligatorio').not().isEmpty(),
     check('nombre','El nombre tiene que tener maximo 100 caracteres').isLength({ max:100 }),
     check('preparacion','La preparacion tiene que tener maximo 500 caracteres').isLength({ max:500 }),
@@ -21,7 +26,6 @@ router.post('/', [
     check('idEquipamiento').custom(esEquipamientoValido),
     check('idMusculoPrincipal').custom(esMusculoValido),
     check('idMusculoSecundario').custom(esMusculoValido),
-    check('idPerfil').custom(esPerfilValido),
     validarCampos
 ],    postEjercicio);
 router.put('/:id',[

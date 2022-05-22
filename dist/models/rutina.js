@@ -15,6 +15,9 @@ const Rutina = conecction_1.default.define('Rutinas', {
     estado: {
         type: sequelize_1.DataTypes.BOOLEAN
     },
+    calificacion: {
+        type: sequelize_1.DataTypes.DOUBLE
+    },
 });
 exports.default = Rutina;
 //# sourceMappingURL=rutina.js.map
