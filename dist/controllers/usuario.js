@@ -77,17 +77,22 @@ const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 subject: "Confirma tu dirección de correo electrónico en Raizel",
                 //text: "Hello world?", // plain text body
                 html: `
-                Hola,${perfil.nombre}
+                Hola,${perfil.nombre} </br>
 
-                Acabas de crear una cuenta de Raizel. Para completar el registro, tan solo tienes que verificar tu dirección de correo electrónico. Pulsa en el botón de aquí abajo:
+                Acabas de crear una cuenta de Raizel. Para completar el registro, tan solo tienes que verificar tu dirección de correo electrónico. Pulsa en el botón de aquí abajo:</br>
+                <a href="https://local:8080/confirmacion/tk=${token}" 
+                style="background-color: #2CB1BC;
+                    color: white;
+                    padding: 15px 25px;
+                    text-decoration: none;">COMPLETA TU REGISTRO</a>              </br>  
                 
-                COMPLETA TU REGISTRO
-                o copia y pega la siguiente URL en la barra de direcciones de tu navegador: <a href="https://192.168.0.196:8080/confirmacion/${token}">Confirmar Email</a>
-                ¡y comienza tu aventura ya!
+                o copia y pega la siguiente URL en la barra de direcciones de tu navegador: https://local:8080/confirmacion/${token} </br>
+                ¡y comienza tu aventura ya!</br>
                 
                 Saludos. El equipo de Raizel
                 `,
             });
+            yield usuario.update({ confirmacion: token });
         }
         catch (error) {
             res.status(400).json({

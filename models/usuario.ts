@@ -20,6 +20,15 @@ const Usuario= db.define('Usuario',{
     estado: {
         type: DataTypes.BOOLEAN
     },
+    confirmacion: {
+        type: DataTypes.STRING
+    },
+    recuperacion: {
+        type: DataTypes.STRING
+    },
+    verificado: {
+        type: DataTypes.BOOLEAN
+    },
 });
 Usuario.prototype.toJSON = function () {
     let values = Object.assign({}, this.get());

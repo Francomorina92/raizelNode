@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.tokenValido = exports.login = void 0;
+exports.confirmacionEmail = exports.tokenValido = exports.login = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const usuario_1 = __importDefault(require("../models/usuario"));
 const generar_jwt_1 = require("../helpers/generar-jwt");
@@ -35,6 +35,12 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
             //Si el usuario no esta activo
             return res.status(400).json({
                 msg: 'El usuario esta inactivo'
+            });
+        }
+        else if (!usuario.getDataValue('verificado')) {
+            //Si el usuario no esta activo
+            return res.status(400).json({
+                msg: 'Debe confirmar el email'
             });
         }
         //Verificar la contraseña
@@ -94,4 +100,45 @@ const tokenValido = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.tokenValido = tokenValido;
+const confirmacionEmail = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { token } = req.body;
+    if (!token) {
+        return res.status(400).json({
+            msg: 'El link no es valido'
+        });
+    }
+    try {
+        //validar el token
+        const secretKey = process.env.SECRETORPRIVATEKEYREGISTRO || '';
+        const { uid } = jsonwebtoken_1.default.verify(token, secretKey);
+        req.uid = uid;
+        const user = yield usuario_1.default.findByPk(uid);
+        //Verificar si el user esta activo
+        if (!user) {
+            return res.status(400).json({
+                msg: `No existe un usuario`
+            });
+        }
+        if (user.estado) {
+            return res.status(400).json({
+                msg: `El usuario esta inactivo`
+            });
+        }
+        if (!user.confirmacion != token) {
+            return res.status(400).json({
+                msg: `El link no es valido. Vuelva a intentarlo`
+            });
+        }
+        yield user.update({ confirmacion: '0', verificado: true });
+        res.json({
+            verificado: true
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            msg: 'Enlace No valido. Vuelva a pedir el mail de confirmacion'
+        });
+    }
+});
+exports.confirmacionEmail = confirmacionEmail;
 //# sourceMappingURL=auth.js.map
