@@ -21,6 +21,11 @@ export const login = async ( req: Request, res:Response, next:Function)=>{
             return res.status(400).json({
                 msg: 'El usuario esta inactivo'
             });
+        }else if(!usuario.getDataValue('verificado')){
+            //Si el usuario no esta activo
+            return res.status(400).json({
+                msg: 'Debe confirmar el email'
+            });
         }
         //Verificar la contraseña
         const validPassword = bcryptjs.compareSync(password, usuario.getDataValue('password'));
@@ -75,6 +80,46 @@ export const tokenValido = async ( req: Request, res:Response, next:Function)=>{
     } catch (error) {
         res.status(401).json({
             msg: 'Token no valido'
+        })
+    }
+}
+export const confirmacionEmail = async ( req: Request, res:Response, next:Function)=>{
+    const { token } = req.body;
+    if (!token) {
+        return res.status(400).json({
+            msg:'El link no es valido'
+        })
+    }
+    try {
+        
+        //validar el token
+        const secretKey = process.env.SECRETORPRIVATEKEYREGISTRO || '';
+        const {uid} = (jwt.verify(token, secretKey) as any);
+        (req as any).uid = uid;
+        const user = await Usuario.findByPk(uid);
+        //Verificar si el user esta activo
+        if (!user) {
+            return res.status(400).json({
+                msg: `No existe un usuario`
+            })
+        }
+        if ((user as any).estado) {
+            return res.status(400).json({
+                msg: `El usuario esta inactivo`
+            })
+        }  
+        if (!(user as any).confirmacion != token) {
+            return res.status(400).json({
+                msg: `El link no es valido. Vuelva a intentarlo`
+            })
+        }      
+        await user.update({confirmacion: '0', verificado: true});
+        res.json({
+            verificado: true
+        })
+    } catch (error) {
+        res.status(400).json({
+            msg: 'Enlace No valido. Vuelva a pedir el mail de confirmacion'
         })
     }
 }

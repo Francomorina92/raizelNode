@@ -24,6 +24,15 @@ const Usuario = conecction_1.default.define('Usuario', {
     estado: {
         type: sequelize_1.DataTypes.BOOLEAN
     },
+    confirmacion: {
+        type: sequelize_1.DataTypes.STRING
+    },
+    recuperacion: {
+        type: sequelize_1.DataTypes.STRING
+    },
+    verificado: {
+        type: sequelize_1.DataTypes.BOOLEAN
+    },
 });
 Usuario.prototype.toJSON = function () {
     let values = Object.assign({}, this.get());

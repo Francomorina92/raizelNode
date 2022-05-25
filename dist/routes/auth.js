@@ -36,5 +36,6 @@ router.post('/login', [
     validar_campos_1.default
 ], auth_1.login);
 router.post('/tokenValido', auth_1.tokenValido);
+router.post('/confirmacionEmail', auth_1.confirmacionEmail);
 exports.default = router;
 //# sourceMappingURL=auth.js.map
