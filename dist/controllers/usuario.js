@@ -29,13 +29,6 @@ const getUsuarios = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         type: QueryTypes.SELECT
     });
     usuarios = rows[0];
-    /* const usuarios= await Usuario.findAndCountAll(
-        {
-            limit:Number(limite),
-            offset:Number(desde),
-            order: [[String(campo),String(orden)]]
-        }
-    ); */
     res.json({ usuarios });
 });
 exports.getUsuarios = getUsuarios;
@@ -54,7 +47,8 @@ const getUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.getUsuario = getUsuario;
 const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Obtenemos los datos por el post
-    const { password, email, img = '', nombre } = req.body;
+    let { password, email, img = '', nombre } = req.body;
+    email = email.toUpperCase();
     try {
         //Encriptar la contraseña
         const salt = bcryptjs_1.default.genSaltSync();
@@ -77,19 +71,25 @@ const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 subject: "Confirma tu dirección de correo electrónico en Raizel",
                 //text: "Hello world?", // plain text body
                 html: `
-                Hola,${perfil.nombre} </br>
-
-                Acabas de crear una cuenta de Raizel. Para completar el registro, tan solo tienes que verificar tu dirección de correo electrónico. Pulsa en el botón de aquí abajo:</br>
+                <div style="margin-left: 20px;">
+                <p>Hola, <span style="color: #2CB1BC;">${perfil.nombre}</span> </p> 
+            
+                <p>    Acabas de crear una cuenta de Raizel. Para completar el registro, tan solo tienes que verificar tu dirección de correo electrónico. Pulsa en el botón de aquí abajo:</p> <br>
+                <div style="display: block;
+                text-align: center;">
                 <a href="https://local:8080/confirmacion/tk=${token}" 
                 style="background-color: #2CB1BC;
                     color: white;
                     padding: 15px 25px;
-                    text-decoration: none;">COMPLETA TU REGISTRO</a>              </br>  
+                    text-decoration: none;">COMPLETA TU REGISTRO</a>
+                </div>
+                <br>  
                 
-                o copia y pega la siguiente URL en la barra de direcciones de tu navegador: https://local:8080/confirmacion/${token} </br>
-                ¡y comienza tu aventura ya!</br>
+                <p>o copia y pega la siguiente URL en la barra de direcciones de tu navegador: https://local:8080/confirmacion/${token}</p>
+                <p>¡y comienza tu aventura ya!</p>
                 
-                Saludos. El equipo de Raizel
+                <p>Saludos. El equipo de Raizel</p>
+            </div>                
                 `,
             });
             yield usuario.update({ confirmacion: token });
@@ -111,6 +111,7 @@ exports.postUsuario = postUsuario;
 const putUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     let { password, email, role, img } = req.body;
+    email = email.toUpperCase();
     try {
         const usuario = yield usuario_1.default.findByPk(id);
         if (!usuario) {

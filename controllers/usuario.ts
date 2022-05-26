@@ -18,13 +18,6 @@ export const getUsuarios= async (req:Request ,res:Response)=>{
         type: QueryTypes.SELECT
     });
     usuarios = rows[0];
-    /* const usuarios= await Usuario.findAndCountAll(
-        {
-            limit:Number(limite),
-            offset:Number(desde),
-            order: [[String(campo),String(orden)]]
-        }
-    ); */
     res.json({usuarios});
 }
 export const getUsuario= async(req:Request ,res:Response)=>{
@@ -42,13 +35,14 @@ export const getUsuario= async(req:Request ,res:Response)=>{
 export const postUsuario= async (req:Request ,res:Response)=>{
 
     //Obtenemos los datos por el post
-    const {password,email,img='', nombre}=req.body;
-    
+    let {password,email,img='', nombre}=req.body;
+    email = email.toUpperCase()
     try {
         
         //Encriptar la contraseña
         const salt = bcryptjs.genSaltSync();
         const pass = bcryptjs.hashSync(password, salt);
+        
         //Guardamos en BD
         const usuario = await Usuario.create({password:pass,email,rol:'USER_ROLE',img,google:false,estado:1});
         if (!usuario) {
@@ -68,19 +62,25 @@ export const postUsuario= async (req:Request ,res:Response)=>{
                 subject: "Confirma tu dirección de correo electrónico en Raizel", // Subject line
                 //text: "Hello world?", // plain text body
                 html: `
-                Hola,${(perfil as any).nombre} </br>
-
-                Acabas de crear una cuenta de Raizel. Para completar el registro, tan solo tienes que verificar tu dirección de correo electrónico. Pulsa en el botón de aquí abajo:</br>
+                <div style="margin-left: 20px;">
+                <p>Hola, <span style="color: #2CB1BC;">${(perfil as any).nombre}</span> </p> 
+            
+                <p>    Acabas de crear una cuenta de Raizel. Para completar el registro, tan solo tienes que verificar tu dirección de correo electrónico. Pulsa en el botón de aquí abajo:</p> <br>
+                <div style="display: block;
+                text-align: center;">
                 <a href="https://local:8080/confirmacion/tk=${token}" 
                 style="background-color: #2CB1BC;
                     color: white;
                     padding: 15px 25px;
-                    text-decoration: none;">COMPLETA TU REGISTRO</a>              </br>  
+                    text-decoration: none;">COMPLETA TU REGISTRO</a>
+                </div>
+                <br>  
                 
-                o copia y pega la siguiente URL en la barra de direcciones de tu navegador: https://local:8080/confirmacion/${token} </br>
-                ¡y comienza tu aventura ya!</br>
+                <p>o copia y pega la siguiente URL en la barra de direcciones de tu navegador: https://local:8080/confirmacion/${token}</p>
+                <p>¡y comienza tu aventura ya!</p>
                 
-                Saludos. El equipo de Raizel
+                <p>Saludos. El equipo de Raizel</p>
+            </div>                
                 `,
             });
             await usuario.update({confirmacion: token});
@@ -100,7 +100,7 @@ export const postUsuario= async (req:Request ,res:Response)=>{
 export const putUsuario= async (req:Request ,res:Response)=>{
     const {id}=req.params;
     let {password,email,role,img}=req.body;
-    
+    email = email.toUpperCase()
     try {
         const usuario = await Usuario.findByPk(id);
         if (!usuario) {

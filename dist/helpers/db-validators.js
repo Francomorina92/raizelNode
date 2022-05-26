@@ -39,6 +39,7 @@ const esRoleValido = (rol = '') => __awaiter(void 0, void 0, void 0, function* (
 exports.esRoleValido = esRoleValido;
 //Verificamos si el mail existe
 const existeEmail = (email = '') => __awaiter(void 0, void 0, void 0, function* () {
+    email = email.toUpperCase();
     const existe = yield usuario_1.default.findOne({
         where: {
             email: email
