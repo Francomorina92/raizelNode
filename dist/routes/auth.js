@@ -37,5 +37,13 @@ router.post('/login', [
 ], auth_1.login);
 router.post('/tokenValido', auth_1.tokenValido);
 router.post('/confirmacionEmail', auth_1.confirmacionEmail);
+router.post('/recuperar', [
+    (0, express_validator_1.check)('email', 'El email es obligatorio').isEmail(),
+    validar_campos_1.default
+], auth_1.recuperar);
+router.post('/cambiarPassword', [
+    (0, express_validator_1.check)('password', 'La contraseña es obligatoria').not().isEmpty(),
+    validar_campos_1.default
+], auth_1.cambiarPassword);
 exports.default = router;
 //# sourceMappingURL=auth.js.map

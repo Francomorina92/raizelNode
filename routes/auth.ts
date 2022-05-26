@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { login, tokenValido, confirmacionEmail } from "../controllers/auth";
+import { login, tokenValido, confirmacionEmail, recuperar, cambiarPassword } from "../controllers/auth";
 import validarCampos from "../middlewares/validar-campos";
 
 const router = Router();
@@ -33,5 +33,13 @@ router.post('/login',[
 ], login);
 router.post('/tokenValido', tokenValido);
 router.post('/confirmacionEmail', confirmacionEmail);
+router.post('/recuperar',[
+    check('email','El email es obligatorio').isEmail(),
+    validarCampos
+], recuperar);
+router.post('/cambiarPassword',[
+    check('password','La contraseña es obligatoria').not().isEmpty(),
+    validarCampos
+], cambiarPassword);
 
 export default router;

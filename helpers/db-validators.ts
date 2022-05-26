@@ -23,6 +23,7 @@ export const esRoleValido =  async(rol='')=>{
 }
 //Verificamos si el mail existe
 export const existeEmail = async(email = '')=>{
+    email = email.toUpperCase()
     const existe =await Usuario.findOne({
         where:{
             email: email
