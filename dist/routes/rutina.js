@@ -62,6 +62,62 @@ const router = (0, express_1.Router)();
  *            schema:
  *              $ref: '#/components/schemas/rutinaGet'
  */
+router.get('/detalles', [
+    validar_jwt_1.default,
+    validar_campos_1.default
+], rutina_1.getDetalles);
+/**
+ * Post track
+ * @openapi
+ *    /rutinas:
+ *  get:
+ *    tags:
+ *    - Rutinas
+ *    summary: Lista de rutinas
+ *    operationId: rutinas
+ *    parameters:
+ *    - name: limite
+ *      in: query
+ *      description: Cantidad de registros que queremos devolver
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: 5
+ *    - name: desde
+ *      in: query
+ *      description: Desde que registro queremos devolver
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: 0
+ *    - name: orden
+ *      in: query
+ *      description: Orden descendente o ascendente para ordenar
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: asc
+ *    - name: campo
+ *      in: query
+ *      description: Campo por el cual queremos ordenar
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: id
+ *    - name: perfil
+ *      in: query
+ *      description: id del perfil que queremos filtrar las rutinas
+ *      required: false
+ *      schema:
+ *        type: string
+ *    responses:
+ *      200:
+ *        description: successful operation
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/rutinaGet'
+ */
 router.get('/', [
     validar_jwt_1.default,
     validar_campos_1.default
@@ -184,5 +240,34 @@ router.delete('/:id', [
     (0, express_validator_1.check)('id').isInt(),
     validar_campos_1.default
 ], rutina_1.deleteRutina);
+/**
+ * Post track
+ * @openapi
+ *    /rutinas:
+ *  post:
+ *    tags:
+ *    - Rutinas
+ *    summary: Crear rutina
+ *    operationId: rutinaPost
+ *    requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  $ref: '#/components/schemas/rutinaPost'
+ *    responses:
+ *      200:
+ *        description: successful operation
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/rutinaGet'
+ */
+router.post('/detalle', [
+    validar_jwt_1.default,
+    (0, express_validator_1.check)('idEjercicio', 'El ejercicio es obligatorio').not().isEmpty(),
+    (0, express_validator_1.check)('idRutina', 'La rutina es obligatoria').not().isEmpty(),
+    (0, express_validator_1.check)('tipoSerie', 'El tipo de serie es obligatorio').not().isEmpty(),
+    validar_campos_1.default
+], rutina_1.postDetalleRutina);
 exports.default = router;
 //# sourceMappingURL=rutina.js.map

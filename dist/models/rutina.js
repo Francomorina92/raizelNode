@@ -18,6 +18,12 @@ const Rutina = conecction_1.default.define('Rutinas', {
     calificacion: {
         type: sequelize_1.DataTypes.DOUBLE
     },
+    musculoPrincipal: {
+        type: sequelize_1.DataTypes.STRING
+    },
+    tiempo: {
+        type: sequelize_1.DataTypes.DOUBLE
+    },
 });
 exports.default = Rutina;
 //# sourceMappingURL=rutina.js.map

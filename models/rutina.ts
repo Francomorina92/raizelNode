@@ -14,6 +14,12 @@ const Rutina= db.define('Rutinas',{
     calificacion: {
         type: DataTypes.DOUBLE
     },
+    musculoPrincipal: {
+        type: DataTypes.STRING
+    },
+    tiempo: {
+        type: DataTypes.DOUBLE
+    },
 });
 
 export default Rutina;

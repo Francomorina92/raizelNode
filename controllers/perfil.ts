@@ -16,10 +16,17 @@ export const getPerfiles= async (req:Request ,res:Response)=>{
 }
 export const getPerfil= async(req:Request ,res:Response)=>{
     const {id}=req.params;
-
-    const perfil = await Perfil.findByPk(id);
+    console.log(id);
+    
+    const perfil = await Perfil.findAll({
+        where:{
+            idUsuario: id
+        }
+    });
+    console.log(perfil);
+    
     if (perfil) {
-        res.json(perfil);
+        res.json(perfil[0]);
     }else{
         res.status(404).json({
             msg: `No existe un perfil con el id ${id}`
