@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { deleteRutina, getRutina, getRutinas, postRutina, putRutina, postDetalleRutina, getDetalles } from "../controllers/rutina";
+import { deleteRutina, getRutina, getRutinas, postRutina, putRutina, postDetalleRutina, getDetalles, putDetalleRutina } from "../controllers/rutina";
 import validarCampos from "../middlewares/validar-campos";
 import {esPerfilValido} from "../helpers/db-validators";
 import validarJWT from "../middlewares/validar-jwt";
@@ -264,6 +264,39 @@ router.delete('/:id',[
     check('tipoSerie','El tipo de serie es obligatorio').not().isEmpty(),
     validarCampos
 ],    postDetalleRutina);
-
+/**
+ * Post track
+ * @openapi
+ *    /rutinas/{id}:
+ *  put:
+ *    tags:
+ *    - Rutinas
+ *    summary: Actualizar rutina
+ *    operationId: rutinaPut
+ *    parameters:
+ *    - name: id
+ *      in: path
+ *      description: Id de la rutina que queremos actualizar
+ *      required: true
+ *      schema:
+ *        type: string
+ *    requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  $ref: '#/components/schemas/rutinaPut'
+ *    responses:
+ *      200:
+ *        description: successful operation
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/rutinaGet'
+ */
+ router.put('/detalles/:id',[
+    validarJWT,
+    check('id','El id tiene que ser numerico').isInt(),
+    validarCampos
+],  putDetalleRutina);
 
 export default router;

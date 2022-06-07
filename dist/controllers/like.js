@@ -28,25 +28,40 @@ const getLikes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getLikes = getLikes;
 const getLike = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const like = yield like_1.default.findByPk(id);
-    if (like) {
-        res.json(like);
+    const { rutina, perfil } = req.body;
+    const like = yield like_1.default.findAll({
+        where: {
+            idRutina: rutina,
+            idPerfil: perfil,
+            estado: true
+        }
+    });
+    if (like[0] != undefined) {
+        res.json(true);
     }
     else {
-        res.status(404).json({
-            msg: `No existe un like con el id ${id}`
-        });
+        res.json(false);
     }
 });
 exports.getLike = getLike;
 const postLike = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Obtenemos los datos por el post
-    const { idPerfil, idRutina } = req.body;
+    const { idPerfil, idRutina, like } = req.body;
     try {
-        //Guardamos en BD
-        const like = yield like_1.default.create({ idPerfil, idRutina, estado: 1 });
-        res.json(like);
+        let likeBase = yield like_1.default.findAll({
+            where: {
+                idRutina: idRutina,
+                idPerfil: idPerfil
+            }
+        });
+        if (likeBase[0] != undefined) {
+            yield likeBase[0].update({ idPerfil, idRutina, estado: like });
+            res.json(like);
+        }
+        else {
+            yield like_1.default.create({ idPerfil, idRutina, estado: 1 });
+            res.json(true);
+        }
     }
     catch (error) {
         res.status(500).json({
