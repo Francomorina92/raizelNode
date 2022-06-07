@@ -6,7 +6,7 @@ import Perfil from "../models/perfil";
 import Detalle from '../models/detalleRutina';
 
 export const getRutinas= async (req:Request ,res:Response)=>{
-    const {limite = 50,desde = 0,orden = 'asc',campo = 'nombre', perfil = 0}= req.query;
+    const {limite = 50,desde = 0,orden = 'asc',campo = 'nombre', perfil = 0, favorita = false}= req.query;
     if (!(req as any).user) {
         return res.status(500).json({
             msg:' Se quiere validar el token primero'
@@ -22,21 +22,31 @@ export const getRutinas= async (req:Request ,res:Response)=>{
     
     let rutinas = null;
     if (perfil!=0) {
-        const rows = await db.query('call getRutinas(:idP, :limite, :desde, :orden, :campo)', { 
-            replacements: { idP, limite, desde, orden, campo }, 
+        if (favorita) {
+            const rows = await db.query('call getRutinasFavoritas(:idP)', { 
+                replacements: { idP, limite, desde, orden, campo }, 
+                model: Rutina,
+                type: QueryTypes.SELECT
+            });
+            rutinas = rows[0];
+        }else{
+            const rows = await db.query('call getRutinas(:idP, :limite, :desde, :orden, :campo)', { 
+                replacements: { idP, limite, desde, orden, campo }, 
+                model: Rutina,
+                type: QueryTypes.SELECT
+            });
+            rutinas = rows[0];
+        }
+        
+    }else{
+        const rows = await db.query('call getRutinasTodas( :orden, :campo)', { 
+            replacements: {orden, campo }, 
             model: Rutina,
             type: QueryTypes.SELECT
         });
         rutinas = rows[0];
+        console.log(rutinas);
         
-    }else{
-        rutinas = await Rutina.findAndCountAll(
-            {
-                limit:Number(limite),
-                offset:Number(desde),
-                order: [[String(campo),String(orden)]]
-            }
-        );
     }
     res.json(rutinas);
 }
@@ -171,6 +181,56 @@ export const postDetalleRutina= async (req:Request ,res:Response)=>{
             unidad,
             observaciones,
             estado:1});
+        res.json(detalle);
+    } catch (error) {
+        res.status(500).json({
+            msg: 'Hable con el administrador'
+        })
+    }
+}
+export const putDetalleRutina= async (req:Request ,res:Response)=>{
+    const {id}=req.params;
+    //Obtenemos los datos por el put
+    const {
+        idRutina,
+        idEjercicio,
+        tipoSerie,
+        cantidadSerie,
+        descanso,
+        repeticionesUno,
+        repeticionesDos,
+        repeticionesTres,
+        repeticionesCuatro,
+        repeticionesCinco,
+        cargaUno,
+        cargaDos,
+        cargaTres,
+        cargaCuatro,
+        cargaCinco,
+        unidad,
+        observaciones}=req.body;
+    if (!(req as any).user) {
+        return res.status(500).json({
+            msg:' Se quiere validar el token primero'
+        })
+    }
+    
+    try {
+        
+        let detalle = {};
+        const rows = await db.query('call getRutina(:id)', { 
+            replacements: { id }, 
+            model: Detalle,
+            type: QueryTypes.SELECT
+        });
+        detalle = rows[0];
+        if (!detalle) {
+            return res.status(404).json({
+                msg: `No existe un detalle con el id ${id}`
+            })
+        }
+        
+        await (detalle as any)[0].update({idRutina,idEjercicio, tipoSerie, cantidadSerie, descanso, repeticionesUno, repeticionesDos, repeticionesTres, repeticionesCuatro, repeticionesCinco, cargaUno, cargaDos, cargaTres, cargaCuatro, cargaCinco, unidad, observaciones});
         res.json(detalle);
     } catch (error) {
         res.status(500).json({

@@ -82,10 +82,7 @@ router.get('/',     getLikes);
  *            schema:
  *              $ref: '#/components/schemas/likeGet'
  */
-router.get('/:id',[
-    check('id').isInt(),
-    validarCampos
-],  getLike);
+router.post('/megusta',  getLike);
 /**
  * Post track
  * @openapi
@@ -108,11 +105,7 @@ router.get('/:id',[
  *            schema:
  *              $ref: '#/components/schemas/likeGet'
  */
-router.post('/', [
-    check('idPerfil').custom(esPerfilValido),
-    check('idRutina').custom(esRutinaValida),
-    validarCampos
-],    postLike);
+router.post('/',    postLike);
 /**
  * Post track
  * @openapi

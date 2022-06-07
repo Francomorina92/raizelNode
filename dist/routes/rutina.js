@@ -269,5 +269,39 @@ router.post('/detalle', [
     (0, express_validator_1.check)('tipoSerie', 'El tipo de serie es obligatorio').not().isEmpty(),
     validar_campos_1.default
 ], rutina_1.postDetalleRutina);
+/**
+ * Post track
+ * @openapi
+ *    /rutinas/{id}:
+ *  put:
+ *    tags:
+ *    - Rutinas
+ *    summary: Actualizar rutina
+ *    operationId: rutinaPut
+ *    parameters:
+ *    - name: id
+ *      in: path
+ *      description: Id de la rutina que queremos actualizar
+ *      required: true
+ *      schema:
+ *        type: string
+ *    requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  $ref: '#/components/schemas/rutinaPut'
+ *    responses:
+ *      200:
+ *        description: successful operation
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/rutinaGet'
+ */
+router.put('/detalles/:id', [
+    validar_jwt_1.default,
+    (0, express_validator_1.check)('id', 'El id tiene que ser numerico').isInt(),
+    validar_campos_1.default
+], rutina_1.putDetalleRutina);
 exports.default = router;
 //# sourceMappingURL=rutina.js.map

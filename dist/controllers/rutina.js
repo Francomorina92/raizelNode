@@ -12,14 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDetalles = exports.getDetalle = exports.postDetalleRutina = exports.deleteRutina = exports.putRutina = exports.postRutina = exports.getRutina = exports.getRutinas = void 0;
+exports.getDetalles = exports.getDetalle = exports.putDetalleRutina = exports.postDetalleRutina = exports.deleteRutina = exports.putRutina = exports.postRutina = exports.getRutina = exports.getRutinas = void 0;
 const rutina_1 = __importDefault(require("../models/rutina"));
 const { QueryTypes } = require('sequelize');
 const conecction_1 = __importDefault(require("../db/conecction"));
 const perfil_1 = __importDefault(require("../models/perfil"));
 const detalleRutina_1 = __importDefault(require("../models/detalleRutina"));
 const getRutinas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 50, desde = 0, orden = 'asc', campo = 'nombre', perfil = 0 } = req.query;
+    const { limite = 50, desde = 0, orden = 'asc', campo = 'nombre', perfil = 0, favorita = false } = req.query;
     if (!req.user) {
         return res.status(500).json({
             msg: ' Se quiere validar el token primero'
@@ -34,19 +34,31 @@ const getRutinas = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const idP = per.id;
     let rutinas = null;
     if (perfil != 0) {
-        const rows = yield conecction_1.default.query('call getRutinas(:idP, :limite, :desde, :orden, :campo)', {
-            replacements: { idP, limite, desde, orden, campo },
+        if (favorita) {
+            const rows = yield conecction_1.default.query('call getRutinasFavoritas(:idP)', {
+                replacements: { idP, limite, desde, orden, campo },
+                model: rutina_1.default,
+                type: QueryTypes.SELECT
+            });
+            rutinas = rows[0];
+        }
+        else {
+            const rows = yield conecction_1.default.query('call getRutinas(:idP, :limite, :desde, :orden, :campo)', {
+                replacements: { idP, limite, desde, orden, campo },
+                model: rutina_1.default,
+                type: QueryTypes.SELECT
+            });
+            rutinas = rows[0];
+        }
+    }
+    else {
+        const rows = yield conecction_1.default.query('call getRutinasTodas( :orden, :campo)', {
+            replacements: { orden, campo },
             model: rutina_1.default,
             type: QueryTypes.SELECT
         });
         rutinas = rows[0];
-    }
-    else {
-        rutinas = yield rutina_1.default.findAndCountAll({
-            limit: Number(limite),
-            offset: Number(desde),
-            order: [[String(campo), String(orden)]]
-        });
+        console.log(rutinas);
     }
     res.json(rutinas);
 });
@@ -176,6 +188,38 @@ const postDetalleRutina = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.postDetalleRutina = postDetalleRutina;
+const putDetalleRutina = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    //Obtenemos los datos por el put
+    const { idRutina, idEjercicio, tipoSerie, cantidadSerie, descanso, repeticionesUno, repeticionesDos, repeticionesTres, repeticionesCuatro, repeticionesCinco, cargaUno, cargaDos, cargaTres, cargaCuatro, cargaCinco, unidad, observaciones } = req.body;
+    if (!req.user) {
+        return res.status(500).json({
+            msg: ' Se quiere validar el token primero'
+        });
+    }
+    try {
+        let detalle = {};
+        const rows = yield conecction_1.default.query('call getRutina(:id)', {
+            replacements: { id },
+            model: detalleRutina_1.default,
+            type: QueryTypes.SELECT
+        });
+        detalle = rows[0];
+        if (!detalle) {
+            return res.status(404).json({
+                msg: `No existe un detalle con el id ${id}`
+            });
+        }
+        yield detalle[0].update({ idRutina, idEjercicio, tipoSerie, cantidadSerie, descanso, repeticionesUno, repeticionesDos, repeticionesTres, repeticionesCuatro, repeticionesCinco, cargaUno, cargaDos, cargaTres, cargaCuatro, cargaCinco, unidad, observaciones });
+        res.json(detalle);
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: 'Hable con el administrador'
+        });
+    }
+});
+exports.putDetalleRutina = putDetalleRutina;
 const getDetalle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const detalle = yield detalleRutina_1.default.findByPk(id);
