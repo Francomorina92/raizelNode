@@ -17,7 +17,7 @@ const calificacion_1 = __importDefault(require("../models/calificacion"));
 const { QueryTypes } = require('sequelize');
 const conecction_1 = __importDefault(require("../db/conecction"));
 const getCalificaciones = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 5, desde = 1, orden = 'desc', campo = 'updatedAt', perfil = 1 } = req.query;
+    const { limite = 500, desde = 0, orden = 'desc', campo = 'updatedAt', perfil = 1 } = req.query;
     const rows = yield conecction_1.default.query('call getCalificaciones(:perfil, :limite, :desde, :orden, :campo)', {
         replacements: { perfil, limite, desde, orden, campo },
         model: calificacion_1.default,
@@ -66,7 +66,7 @@ const putCalificacion = (req, res) => __awaiter(void 0, void 0, void 0, function
             });
         }
         yield vCalificacion.update({ mensaje, calificacion, idPerfil, idUsuario, estado });
-        res.json({ msg: 'Calificacion actualizada perfectamente' });
+        res.json(vCalificacion);
     }
     catch (error) {
         res.status(500).json({

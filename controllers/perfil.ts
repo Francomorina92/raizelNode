@@ -16,14 +16,12 @@ export const getPerfiles= async (req:Request ,res:Response)=>{
 }
 export const getPerfil= async(req:Request ,res:Response)=>{
     const {id}=req.params;
-    console.log(id);
     
     const perfil = await Perfil.findAll({
         where:{
             idUsuario: id
         }
     });
-    console.log(perfil);
     
     if (perfil) {
         res.json(perfil[0]);

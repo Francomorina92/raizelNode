@@ -58,7 +58,6 @@ const getRutinas = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             type: QueryTypes.SELECT
         });
         rutinas = rows[0];
-        console.log(rutinas);
     }
     res.json(rutinas);
 });

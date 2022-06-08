@@ -110,8 +110,6 @@ router.get('/:id',[
  */
 router.post('/', [
     check('calificacion','La calificacion es obligatoria').not().isEmpty(),
-    check('idUsuario').custom(esPerfilValido),
-    check('idPerfil').custom(esPerfilValido),
     validarCampos
 ],    postCalificacion);
 /**
@@ -145,8 +143,6 @@ router.post('/', [
  */
 router.put('/:id',[
     check('id','El id tiene que ser numerico').isInt(),
-    check('idUsuario').custom(esPerfilValido),
-    check('idPerfil').custom(esPerfilValido),
     validarCampos
 ],  putCalificacion);
 /**
