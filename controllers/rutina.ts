@@ -45,7 +45,6 @@ export const getRutinas= async (req:Request ,res:Response)=>{
             type: QueryTypes.SELECT
         });
         rutinas = rows[0];
-        console.log(rutinas);
         
     }
     res.json(rutinas);

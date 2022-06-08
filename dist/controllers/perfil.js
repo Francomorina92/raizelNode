@@ -26,13 +26,11 @@ const getPerfiles = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getPerfiles = getPerfiles;
 const getPerfil = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    console.log(id);
     const perfil = yield perfil_1.default.findAll({
         where: {
             idUsuario: id
         }
     });
-    console.log(perfil);
     if (perfil) {
         res.json(perfil[0]);
     }
