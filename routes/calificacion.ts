@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { deleteCalificacion, getCalificacion, getCalificaciones, postCalificacion, putCalificacion } from "../controllers/calificacion";
+import { deleteCalificacion, getCalificacion, getCalificaciones, postCalificacion, putCalificacion, getTotalCalificaciones } from "../controllers/calificacion";
 import validarCampos from "../middlewares/validar-campos";
 import {esPerfilValido} from "../helpers/db-validators";
+import validarJWT from "../middlewares/validar-jwt";
 
 const router = Router();
 /**
@@ -58,6 +59,62 @@ const router = Router();
  *              $ref: '#/components/schemas/calificacionGet'
  */
 router.get('/',     getCalificaciones);
+/**
+ * Post track
+ * @openapi
+ *    /calificaciones:
+ *  get:
+ *    tags:
+ *    - Calificaciones
+ *    summary: Lista de calificaciones
+ *    operationId: calificaciones
+ *    parameters:
+ *    - name: limite
+ *      in: query
+ *      description: Cantidad de registros que queremos devolver
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: 5
+ *    - name: desde
+ *      in: query
+ *      description: Desde que registro queremos devolver
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: 0
+ *    - name: orden
+ *      in: query
+ *      description: Orden descendente o ascendente para ordenar
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: asc
+ *    - name: campo
+ *      in: query
+ *      description: Campo por el cual queremos ordenar
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: id
+ *    - name: perfil
+ *      in: query
+ *      description: id del perfil que queremos filtrar las calificaciones
+ *      required: true
+ *      schema:
+ *        type: string
+ *    responses:
+ *      200:
+ *        description: successful operation
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/calificacionGet'
+ */
+ router.get('/todos',[
+    validarJWT,
+    validarCampos
+], getTotalCalificaciones);
 /**
  * Post track
  * @openapi
@@ -174,5 +231,6 @@ router.delete('/:id',[
     check('id').isInt(),
     validarCampos
 ],  deleteCalificacion);
+
 
 export default router;

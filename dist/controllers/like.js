@@ -12,10 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteLike = exports.putLike = exports.postLike = exports.getLike = exports.getLikes = void 0;
+exports.getMeGustasUltimos = exports.getMeGustasTotales = exports.deleteLike = exports.putLike = exports.postLike = exports.getLike = exports.getLikes = void 0;
 const like_1 = __importDefault(require("../models/like"));
 const { QueryTypes } = require('sequelize');
 const conecction_1 = __importDefault(require("../db/conecction"));
+const perfil_1 = __importDefault(require("../models/perfil"));
+const likeDTO_1 = __importDefault(require("../models/likeDTO"));
 const getLikes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { limite = 5, desde = 1, orden = 'desc', campo = 'updatedAt', rutina = 1 } = req.query;
     const rows = yield conecction_1.default.query('call getLikes(:rutina, :limite, :desde, :orden, :campo)', {
@@ -105,4 +107,53 @@ const deleteLike = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     });
 });
 exports.deleteLike = deleteLike;
+const getMeGustasTotales = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.user) {
+        return res.status(500).json({
+            msg: ' Se quiere validar el token primero'
+        });
+    }
+    const { id } = req.user;
+    const per = yield perfil_1.default.findOne({
+        where: {
+            idUsuario: id
+        }
+    });
+    const idP = per.id;
+    const rows = yield conecction_1.default.query('call getMeGustasTotales(:idP)', {
+        replacements: { idP },
+        model: likeDTO_1.default,
+        type: QueryTypes.SELECT
+    });
+    const likes = rows[0];
+    res.json({ likes });
+});
+exports.getMeGustasTotales = getMeGustasTotales;
+const getMeGustasUltimos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.user) {
+        return res.status(500).json({
+            msg: ' Se quiere validar el token primero'
+        });
+    }
+    const { id } = req.user;
+    const per = yield perfil_1.default.findOne({
+        where: {
+            idUsuario: id
+        }
+    });
+    const idP = per.id;
+    let fechaActual = new Date();
+    fechaActual = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 1);
+    let desde = new Date();
+    desde.setMonth(desde.getMonth() - 2);
+    const rows = yield conecction_1.default.query('call getMeGustasUltimos(:idP, :desde, :fechaActual)', {
+        replacements: { idP, desde, fechaActual },
+        model: likeDTO_1.default,
+        type: QueryTypes.SELECT
+    });
+    const likes = rows[0];
+    res.json({ likes });
+    /* res.json('ok'); */
+});
+exports.getMeGustasUltimos = getMeGustasUltimos;
 //# sourceMappingURL=like.js.map

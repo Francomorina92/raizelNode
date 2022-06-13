@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import Calificacion from '../models/calificacion';
 const { QueryTypes } = require('sequelize');
 import db from "../db/conecction";
+import Perfil from "../models/perfil";
+import CalificacionDTO from "../models/calificacionDTO";
 
 
 export const getCalificaciones= async (req:Request ,res:Response)=>{
@@ -74,4 +76,30 @@ export const deleteCalificacion=async (req:Request ,res:Response)=>{
     res.json({
         msg: 'Calificacion borrada'
     })
+}
+
+export const getTotalCalificaciones= async (req:Request ,res:Response)=>{ 
+    
+    if (!(req as any).user) {
+        return res.status(500).json({
+            msg:' Se quiere validar el token primero'
+        })
+    }
+    const {id} = (req as any).user;
+    const per = await Perfil.findOne({
+        where:{
+            idUsuario: id
+        }
+    }); 
+    const idP = (per as any).id
+    
+    
+    const rows = await db.query('call getTotalCalificaciones(:idP)', { 
+        replacements: { idP}, 
+        model: CalificacionDTO,
+        type: QueryTypes.SELECT
+    });
+    const calificaciones = rows[0];
+    res.json({calificaciones});
+    /* res.json('ok'); */
 }

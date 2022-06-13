@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import Like from '../models/like';
 const { QueryTypes } = require('sequelize');
 import db from "../db/conecction";
+import Perfil from "../models/perfil";
+import LikeDTO from "../models/likeDTO";
 
 export const getLikes= async (req:Request ,res:Response)=>{
     const {limite = 5,desde = 1,orden = 'desc',campo = 'updatedAt', rutina = 1}= req.query; 
@@ -90,4 +92,54 @@ export const deleteLike=async (req:Request ,res:Response)=>{
     res.json({
         msg: 'Like borrado'
     })
+}
+export const getMeGustasTotales= async (req:Request ,res:Response)=>{ 
+    
+    if (!(req as any).user) {
+        return res.status(500).json({
+            msg:' Se quiere validar el token primero'
+        })
+    }
+    const {id} = (req as any).user;
+    const per = await Perfil.findOne({
+        where:{
+            idUsuario: id
+        }
+    }); 
+    const idP = (per as any).id
+    const rows = await db.query('call getMeGustasTotales(:idP)', { 
+        replacements: { idP }, 
+        model: LikeDTO,
+        type: QueryTypes.SELECT
+    });
+    const likes = rows[0];
+    res.json({likes});
+}
+export const getMeGustasUltimos= async (req:Request ,res:Response)=>{ 
+    
+    if (!(req as any).user) {
+        return res.status(500).json({
+            msg:' Se quiere validar el token primero'
+        })
+    }
+    const {id} = (req as any).user;
+    const per = await Perfil.findOne({
+        where:{
+            idUsuario: id
+        }
+    }); 
+    const idP = (per as any).id
+    let fechaActual = new Date();
+    fechaActual = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 1);
+    let desde = new Date();
+    desde.setMonth(desde.getMonth() - 2);
+    
+    const rows = await db.query('call getMeGustasUltimos(:idP, :desde, :fechaActual)', { 
+        replacements: { idP, desde, fechaActual }, 
+        model: LikeDTO,
+        type: QueryTypes.SELECT
+    });
+    const likes = rows[0];
+    res.json({likes});
+    /* res.json('ok'); */
 }

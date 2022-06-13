@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { deleteLike, getLike, getLikes, postLike, putLike } from "../controllers/like";
+import { deleteLike, getLike, getLikes, postLike, putLike, getMeGustasTotales, getMeGustasUltimos } from "../controllers/like";
 import validarCampos from "../middlewares/validar-campos";
 import {esPerfilValido,esRutinaValida} from "../helpers/db-validators";
+import validarJWT from "../middlewares/validar-jwt";
 
 const router = Router();
 /**
@@ -170,5 +171,117 @@ router.delete('/:id',[
     check('id').isInt(),
     validarCampos
 ],  deleteLike);
+/**
+ * Post track
+ * @openapi
+ *    /likes:
+ *  get:
+ *    tags:
+ *    - Likes
+ *    summary: Lista de likes
+ *    operationId: likes
+ *    parameters:
+ *    - name: limite
+ *      in: query
+ *      description: Cantidad de registros que queremos devolver
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: 5
+ *    - name: desde
+ *      in: query
+ *      description: Desde que registro queremos devolver
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: 0
+ *    - name: orden
+ *      in: query
+ *      description: Orden descendente o ascendente para ordenar
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: asc
+ *    - name: campo
+ *      in: query
+ *      description: Campo por el cual queremos ordenar
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: id
+ *    - name: rutina
+ *      in: query
+ *      description: id de la rutina que queremos filtrar las likes
+ *      required: true
+ *      schema:
+ *        type: string
+ *    responses:
+ *      200:
+ *        description: successful operation
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/likeGet'
+ */
+ router.get('/todos',[
+    validarJWT,
+    validarCampos
+],     getMeGustasTotales);
+/**
+ * Post track
+ * @openapi
+ *    /likes:
+ *  get:
+ *    tags:
+ *    - Likes
+ *    summary: Lista de likes
+ *    operationId: likes
+ *    parameters:
+ *    - name: limite
+ *      in: query
+ *      description: Cantidad de registros que queremos devolver
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: 5
+ *    - name: desde
+ *      in: query
+ *      description: Desde que registro queremos devolver
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: 0
+ *    - name: orden
+ *      in: query
+ *      description: Orden descendente o ascendente para ordenar
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: asc
+ *    - name: campo
+ *      in: query
+ *      description: Campo por el cual queremos ordenar
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: id
+ *    - name: rutina
+ *      in: query
+ *      description: id de la rutina que queremos filtrar las likes
+ *      required: true
+ *      schema:
+ *        type: string
+ *    responses:
+ *      200:
+ *        description: successful operation
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/likeGet'
+ */
+ router.get('/ultimos',[
+    validarJWT,
+    validarCampos
+],     getMeGustasUltimos);
 
 export default router;

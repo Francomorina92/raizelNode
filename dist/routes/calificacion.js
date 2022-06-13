@@ -7,6 +7,7 @@ const express_1 = require("express");
 const express_validator_1 = require("express-validator");
 const calificacion_1 = require("../controllers/calificacion");
 const validar_campos_1 = __importDefault(require("../middlewares/validar-campos"));
+const validar_jwt_1 = __importDefault(require("../middlewares/validar-jwt"));
 const router = (0, express_1.Router)();
 /**
  * Post track
@@ -61,6 +62,62 @@ const router = (0, express_1.Router)();
  *              $ref: '#/components/schemas/calificacionGet'
  */
 router.get('/', calificacion_1.getCalificaciones);
+/**
+ * Post track
+ * @openapi
+ *    /calificaciones:
+ *  get:
+ *    tags:
+ *    - Calificaciones
+ *    summary: Lista de calificaciones
+ *    operationId: calificaciones
+ *    parameters:
+ *    - name: limite
+ *      in: query
+ *      description: Cantidad de registros que queremos devolver
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: 5
+ *    - name: desde
+ *      in: query
+ *      description: Desde que registro queremos devolver
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: 0
+ *    - name: orden
+ *      in: query
+ *      description: Orden descendente o ascendente para ordenar
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: asc
+ *    - name: campo
+ *      in: query
+ *      description: Campo por el cual queremos ordenar
+ *      required: false
+ *      schema:
+ *        type: string
+ *        default: id
+ *    - name: perfil
+ *      in: query
+ *      description: id del perfil que queremos filtrar las calificaciones
+ *      required: true
+ *      schema:
+ *        type: string
+ *    responses:
+ *      200:
+ *        description: successful operation
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/calificacionGet'
+ */
+router.get('/todos', [
+    validar_jwt_1.default,
+    validar_campos_1.default
+], calificacion_1.getTotalCalificaciones);
 /**
  * Post track
  * @openapi
