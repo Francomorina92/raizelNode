@@ -12,10 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCalificacion = exports.putCalificacion = exports.postCalificacion = exports.getCalificacion = exports.getCalificaciones = void 0;
+exports.getTotalCalificaciones = exports.deleteCalificacion = exports.putCalificacion = exports.postCalificacion = exports.getCalificacion = exports.getCalificaciones = void 0;
 const calificacion_1 = __importDefault(require("../models/calificacion"));
 const { QueryTypes } = require('sequelize');
 const conecction_1 = __importDefault(require("../db/conecction"));
+const perfil_1 = __importDefault(require("../models/perfil"));
+const calificacionDTO_1 = __importDefault(require("../models/calificacionDTO"));
 const getCalificaciones = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { limite = 500, desde = 0, orden = 'desc', campo = 'updatedAt', perfil = 1 } = req.query;
     const rows = yield conecction_1.default.query('call getCalificaciones(:perfil, :limite, :desde, :orden, :campo)', {
@@ -90,4 +92,27 @@ const deleteCalificacion = (req, res) => __awaiter(void 0, void 0, void 0, funct
     });
 });
 exports.deleteCalificacion = deleteCalificacion;
+const getTotalCalificaciones = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.user) {
+        return res.status(500).json({
+            msg: ' Se quiere validar el token primero'
+        });
+    }
+    const { id } = req.user;
+    const per = yield perfil_1.default.findOne({
+        where: {
+            idUsuario: id
+        }
+    });
+    const idP = per.id;
+    const rows = yield conecction_1.default.query('call getTotalCalificaciones(:idP)', {
+        replacements: { idP },
+        model: calificacionDTO_1.default,
+        type: QueryTypes.SELECT
+    });
+    const calificaciones = rows[0];
+    res.json({ calificaciones });
+    /* res.json('ok'); */
+});
+exports.getTotalCalificaciones = getTotalCalificaciones;
 //# sourceMappingURL=calificacion.js.map

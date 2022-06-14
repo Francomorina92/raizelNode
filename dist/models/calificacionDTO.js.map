@@ -1,0 +1,1 @@
+{"version":3,"file":"calificacionDTO.js","sourceRoot":"","sources":["../../models/calificacionDTO.ts"],"names":[],"mappings":";;;;;AAAA,yCAAsC;AACtC,kEAAkC;AAElC,MAAM,eAAe,GAAE,oBAAE,CAAC,MAAM,CAAC,OAAO,EAAC;IACrC,QAAQ,EAAE;QACN,IAAI,EAAE,qBAAS,CAAC,OAAO;KAC1B;IACD,YAAY,EAAE;QACV,IAAI,EAAE,qBAAS,CAAC,OAAO;KAC1B;CACJ,CAAC,CAAC;AAEH,kBAAe,eAAe,CAAC"}
