@@ -1,6 +1,7 @@
 import express,{Application} from 'express'
 import cors from "cors";
 import authRoutes from "../routes/auth";
+import uploadRoutes from "../routes/uploads";
 import calificacionRoutes from "../routes/calificacion";
 import categoriaRoutes from "../routes/categoria";
 import equipamientoRoutes from "../routes/equipamiento";
@@ -11,6 +12,7 @@ import rutinaRoutes from "../routes/rutina";
 import userRoutes from "../routes/usuario";
 import ejercicioRoutes from "../routes/ejercicio";
 import swaggerUI from "swagger-ui-express";
+import fileUpload from "express-fileupload";
 import swaggerSetup from "../docs/swaggeer";
 import db from '../db/conecction';
 class Server {
@@ -26,7 +28,8 @@ class Server {
         rutinas: '/api/rutinas',
         usuarios: '/api/usuarios',
         ejercicios: '/api/ejercicios',
-        auth: '/api/auth'
+        auth: '/api/auth',
+        uploads: '/api/uploads'
     }
     constructor() {
         this.app=express();
@@ -52,6 +55,12 @@ class Server {
         this.app.use(express.json())
         //Carpeta publica
         this.app.use(express.static('public'))
+        //Carga de archivos
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/',
+            createParentPath: true
+        }));
     }
     routes(){
         this.app.use(this.apiPaths.calificaciones, calificacionRoutes),
@@ -64,6 +73,7 @@ class Server {
         this.app.use(this.apiPaths.usuarios, userRoutes),
         this.app.use(this.apiPaths.ejercicios, ejercicioRoutes),
         this.app.use(this.apiPaths.auth, authRoutes),
+        this.app.use(this.apiPaths.uploads, uploadRoutes),
         this.app.use("/documentacion",swaggerUI.serve, swaggerUI.setup(swaggerSetup))
     }
     listen(){

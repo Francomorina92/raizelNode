@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const auth_1 = __importDefault(require("../routes/auth"));
+const uploads_1 = __importDefault(require("../routes/uploads"));
 const calificacion_1 = __importDefault(require("../routes/calificacion"));
 const categoria_1 = __importDefault(require("../routes/categoria"));
 const equipamiento_1 = __importDefault(require("../routes/equipamiento"));
@@ -25,6 +26,7 @@ const rutina_1 = __importDefault(require("../routes/rutina"));
 const usuario_1 = __importDefault(require("../routes/usuario"));
 const ejercicio_1 = __importDefault(require("../routes/ejercicio"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const swaggeer_1 = __importDefault(require("../docs/swaggeer"));
 const conecction_1 = __importDefault(require("../db/conecction"));
 class Server {
@@ -39,7 +41,8 @@ class Server {
             rutinas: '/api/rutinas',
             usuarios: '/api/usuarios',
             ejercicios: '/api/ejercicios',
-            auth: '/api/auth'
+            auth: '/api/auth',
+            uploads: '/api/uploads'
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8000';
@@ -65,6 +68,12 @@ class Server {
         this.app.use(express_1.default.json());
         //Carpeta publica
         this.app.use(express_1.default.static('public'));
+        //Carga de archivos
+        this.app.use((0, express_fileupload_1.default)({
+            useTempFiles: true,
+            tempFileDir: '/tmp/',
+            createParentPath: true
+        }));
     }
     routes() {
         this.app.use(this.apiPaths.calificaciones, calificacion_1.default),
@@ -77,6 +86,7 @@ class Server {
             this.app.use(this.apiPaths.usuarios, usuario_1.default),
             this.app.use(this.apiPaths.ejercicios, ejercicio_1.default),
             this.app.use(this.apiPaths.auth, auth_1.default),
+            this.app.use(this.apiPaths.uploads, uploads_1.default),
             this.app.use("/documentacion", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggeer_1.default));
     }
     listen() {

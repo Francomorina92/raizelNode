@@ -39,6 +39,13 @@ export const esUsuarioValido =  async(idUsuario='')=>{
         throw new Error(`El usuario ${idUsuario} no esta registrado en la BD`);
     }
 }
+export const coleccionesPermitidas =  async(coleccion = '', colecciones: Array<string>= [])=>{
+    const incluida = colecciones.includes(coleccion)
+    if (!incluida) {
+        throw new Error(`La coleccion no es permitida`);
+    }
+    return true;
+}
 export const esPerfilValido =  async(idPerfil='')=>{
     const existePerfil= await Perfil.findByPk(idPerfil);
     if (!existePerfil) {

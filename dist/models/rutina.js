@@ -24,6 +24,9 @@ const Rutina = conecction_1.default.define('Rutinas', {
     tiempo: {
         type: sequelize_1.DataTypes.DOUBLE
     },
+    img: {
+        type: sequelize_1.DataTypes.STRING
+    },
 });
 exports.default = Rutina;
 //# sourceMappingURL=rutina.js.map

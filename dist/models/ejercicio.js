@@ -42,6 +42,9 @@ const Ejercicio = conecction_1.default.define('Ejercicios', {
     tiempo: {
         type: sequelize_1.DataTypes.INTEGER
     },
+    img: {
+        type: sequelize_1.DataTypes.STRING
+    },
 });
 exports.default = Ejercicio;
 //# sourceMappingURL=ejercicio.js.map

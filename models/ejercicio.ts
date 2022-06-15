@@ -38,6 +38,9 @@ const Ejercicio= db.define('Ejercicios',{
     tiempo: {
         type: DataTypes.INTEGER
     },
+    img: {
+        type: DataTypes.STRING
+    },
 });
 
 export default Ejercicio;

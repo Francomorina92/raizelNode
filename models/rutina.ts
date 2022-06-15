@@ -20,6 +20,9 @@ const Rutina= db.define('Rutinas',{
     tiempo: {
         type: DataTypes.DOUBLE
     },
+    img: {
+        type: DataTypes.STRING
+    },
 });
 
 export default Rutina;

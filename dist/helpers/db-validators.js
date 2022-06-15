@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.esCategoriaValida = exports.esEquipamientoValido = exports.esMusculoValido = exports.esRutinaValida = exports.esPerfilValido = exports.esUsuarioValido = exports.existeEmail = exports.esRoleValido = void 0;
+exports.esCategoriaValida = exports.esEquipamientoValido = exports.esMusculoValido = exports.esRutinaValida = exports.esPerfilValido = exports.coleccionesPermitidas = exports.esUsuarioValido = exports.existeEmail = exports.esRoleValido = void 0;
 const rol_1 = __importDefault(require("../models/rol"));
 const usuario_1 = __importDefault(require("../models/usuario"));
 const perfil_1 = __importDefault(require("../models/perfil"));
@@ -57,6 +57,14 @@ const esUsuarioValido = (idUsuario = '') => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.esUsuarioValido = esUsuarioValido;
+const coleccionesPermitidas = (coleccion = '', colecciones = []) => __awaiter(void 0, void 0, void 0, function* () {
+    const incluida = colecciones.includes(coleccion);
+    if (!incluida) {
+        throw new Error(`La coleccion no es permitida`);
+    }
+    return true;
+});
+exports.coleccionesPermitidas = coleccionesPermitidas;
 const esPerfilValido = (idPerfil = '') => __awaiter(void 0, void 0, void 0, function* () {
     const existePerfil = yield perfil_1.default.findByPk(idPerfil);
     if (!existePerfil) {
