@@ -10,6 +10,7 @@ import Ejercicio from "../models/ejercicio";
 import Rutina from "../models/rutina";
 const { QueryTypes } = require('sequelize');
 import db from "../db/conecction";
+import Perfil from '../models/perfil';
 /* cloudinary.config('cloudinary://687898186776262:LBH4rOuM49gwoHiMvlRgxWQrcOs@raizel'); */
 cloudinary.config({ 
     cloud_name: 'raizel', 
@@ -95,7 +96,11 @@ export const actualizarArchivoCloudinary = async (req:Request ,res:Response)=>{
 
     switch (coleccion) {
         case 'usuarios':
-            modelo = await Usuario.findByPk(id);
+            modelo = await Perfil.findOne({
+                where:{
+                    idUSuario: id
+                }
+            });
             if (!modelo) {
                 return res.status(400).json({msg:`No existe usuario con el id ${id}`});
             }

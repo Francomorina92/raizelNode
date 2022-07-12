@@ -12,12 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDetalles = exports.getDetalle = exports.putDetalleRutina = exports.postDetalleRutina = exports.deleteRutina = exports.putRutina = exports.postRutina = exports.getRutina = exports.getRutinas = void 0;
+exports.deletedetalle = exports.getDetalles = exports.getDetalle = exports.putDetalleRutina = exports.postDetalleRutina = exports.deleteRutina = exports.putRutina = exports.postRutina = exports.getRutina = exports.getRutinas = void 0;
 const rutina_1 = __importDefault(require("../models/rutina"));
 const { QueryTypes } = require('sequelize');
 const conecction_1 = __importDefault(require("../db/conecction"));
 const perfil_1 = __importDefault(require("../models/perfil"));
 const detalleRutina_1 = __importDefault(require("../models/detalleRutina"));
+const detalleR_1 = __importDefault(require("../models/detalleR"));
 const getRutinas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { limite = 50, desde = 0, orden = 'asc', campo = 'nombre', perfil = 0, favorita = false } = req.query;
     if (!req.user) {
@@ -25,6 +26,8 @@ const getRutinas = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             msg: ' Se quiere validar el token primero'
         });
     }
+    console.log(perfil);
+    console.log(favorita);
     const { id } = req.user;
     const per = yield perfil_1.default.findOne({
         where: {
@@ -35,16 +38,18 @@ const getRutinas = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     let rutinas = null;
     if (perfil != 0) {
         if (favorita) {
-            const rows = yield conecction_1.default.query('call getRutinasFavoritas(:idP)', {
-                replacements: { idP, limite, desde, orden, campo },
+            console.log('favorita');
+            const rows = yield conecction_1.default.query('call getRutinasFavoritas(:perfil)', {
+                replacements: { perfil },
                 model: rutina_1.default,
                 type: QueryTypes.SELECT
             });
             rutinas = rows[0];
         }
         else {
-            const rows = yield conecction_1.default.query('call getRutinas(:idP, :limite, :desde, :orden, :campo)', {
-                replacements: { idP, limite, desde, orden, campo },
+            console.log('No favorita');
+            const rows = yield conecction_1.default.query('call getRutinas(:perfil)', {
+                replacements: { perfil },
                 model: rutina_1.default,
                 type: QueryTypes.SELECT
             });
@@ -59,6 +64,7 @@ const getRutinas = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
         rutinas = rows[0];
     }
+    console.log('rutinas ' + rutinas);
     res.json(rutinas);
 });
 exports.getRutinas = getRutinas;
@@ -249,4 +255,18 @@ const getDetalles = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     res.json(detalles);
 });
 exports.getDetalles = getDetalles;
+const deletedetalle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const detalle = yield detalleR_1.default.findByPk(id);
+    if (!detalle) {
+        return res.status(404).json({
+            msg: `No existe una detalle con el id ${id}`
+        });
+    }
+    yield detalle.destroy();
+    res.json({
+        msg: true
+    });
+});
+exports.deletedetalle = deletedetalle;
 //# sourceMappingURL=rutina.js.map

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { deletePerfil, getPerfil, getPerfiles, postPerfil, putPerfil } from "../controllers/perfil";
+import { deletePerfil, getPerfil, getPerfiles, postPerfil, putPerfil, getPerfilPropio } from "../controllers/perfil";
 import validarCampos from "../middlewares/validar-campos";
 import {esUsuarioValido} from "../helpers/db-validators";
 import validarJWT from "../middlewares/validar-jwt";
@@ -53,6 +53,35 @@ const router = Router();
  *              $ref: '#/components/schemas/perfilGet'
  */
 router.get('/',     getPerfiles);
+/**
+ * Post track
+ * @openapi
+ *    /perfiles/{id}:
+ *  get:
+ *    tags:
+ *    - Perfiles
+ *    summary: Obtener perfil
+ *    operationId: perfil
+ *    parameters:
+ *    - name: id
+ *      in: path
+ *      description: Id del perfil que queremos consultar
+ *      required: true
+ *      schema:
+ *        type: string
+ *    responses:
+ *      200:
+ *        description: successful operation
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/perfilGet'
+ */
+ router.get('/propio/:id',[
+    validarJWT,
+    check('id').isInt(),
+    validarCampos  
+],  getPerfilPropio);
 /**
  * Post track
  * @openapi

@@ -27,6 +27,9 @@ const Perfil = conecction_1.default.define('Perfiles', {
     web: {
         type: sequelize_1.DataTypes.STRING
     },
+    img: {
+        type: sequelize_1.DataTypes.STRING
+    },
     estado: {
         type: sequelize_1.DataTypes.BOOLEAN
     },

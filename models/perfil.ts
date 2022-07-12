@@ -23,6 +23,9 @@ const Perfil= db.define('Perfiles',{
     web: {
         type: DataTypes.STRING
     },
+    img: {
+        type: DataTypes.STRING
+    },
     estado: {
         type: DataTypes.BOOLEAN
     },

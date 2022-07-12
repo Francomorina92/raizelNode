@@ -31,6 +31,24 @@ export const getPerfil= async(req:Request ,res:Response)=>{
         });
     }
 }
+export const getPerfilPropio= async(req:Request ,res:Response)=>{
+    const {id}=req.params;
+    
+    const perfil = await Perfil.findAll({
+        where:{
+            id: id
+        }
+    });
+    
+    
+    if (perfil) {
+        res.json(perfil[0]);
+    }else{
+        res.status(404).json({
+            msg: `No existe un perfil con el id ${id}`
+        });
+    }
+}
 export const postPerfil= async (req:Request ,res:Response)=>{
 
     //Obtenemos los datos por el post
@@ -51,7 +69,11 @@ export const putPerfil= async (req:Request ,res:Response)=>{
     let {nombre,idUsuario,apellido,facebook,twitter,instagram,web,estado}=req.body;
     
     try {
-        const perfil = await Perfil.findByPk(id);
+        const perfil = await Perfil.findOne({
+            where:{
+                id: id
+            }
+        });
         if (!perfil) {
             return res.status(404).json({
                 msg: `No existe un perfil con el id ${id}`

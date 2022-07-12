@@ -81,6 +81,35 @@ router.get('/', perfil_1.getPerfiles);
  *            schema:
  *              $ref: '#/components/schemas/perfilGet'
  */
+router.get('/propio/:id', [
+    validar_jwt_1.default,
+    (0, express_validator_1.check)('id').isInt(),
+    validar_campos_1.default
+], perfil_1.getPerfilPropio);
+/**
+ * Post track
+ * @openapi
+ *    /perfiles/{id}:
+ *  get:
+ *    tags:
+ *    - Perfiles
+ *    summary: Obtener perfil
+ *    operationId: perfil
+ *    parameters:
+ *    - name: id
+ *      in: path
+ *      description: Id del perfil que queremos consultar
+ *      required: true
+ *      schema:
+ *        type: string
+ *    responses:
+ *      200:
+ *        description: successful operation
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/perfilGet'
+ */
 router.get('/:id', [
     validar_jwt_1.default,
     (0, express_validator_1.check)('id').isInt(),

@@ -4,6 +4,7 @@ const { QueryTypes } = require('sequelize');
 import db from "../db/conecction";
 import Perfil from "../models/perfil";
 import Detalle from '../models/detalleRutina';
+import DetalleR from "../models/detalleR";
 
 export const getRutinas= async (req:Request ,res:Response)=>{
     const {limite = 50,desde = 0,orden = 'asc',campo = 'nombre', perfil = 0, favorita = false}= req.query;
@@ -12,6 +13,9 @@ export const getRutinas= async (req:Request ,res:Response)=>{
             msg:' Se quiere validar el token primero'
         })
     }
+    console.log(perfil);
+    console.log(favorita);
+    
     const {id} = (req as any).user;
     const per = await Perfil.findOne({
         where:{
@@ -23,15 +27,18 @@ export const getRutinas= async (req:Request ,res:Response)=>{
     let rutinas = null;
     if (perfil!=0) {
         if (favorita) {
-            const rows = await db.query('call getRutinasFavoritas(:idP)', { 
-                replacements: { idP, limite, desde, orden, campo }, 
+            console.log('favorita');
+            
+            const rows = await db.query('call getRutinasFavoritas(:perfil)', { 
+                replacements: { perfil}, 
                 model: Rutina,
                 type: QueryTypes.SELECT
             });
             rutinas = rows[0];
         }else{
-            const rows = await db.query('call getRutinas(:idP, :limite, :desde, :orden, :campo)', { 
-                replacements: { idP, limite, desde, orden, campo }, 
+            console.log('No favorita');
+            const rows = await db.query('call getRutinas(:perfil)', { 
+                replacements: { perfil}, 
                 model: Rutina,
                 type: QueryTypes.SELECT
             });
@@ -47,6 +54,8 @@ export const getRutinas= async (req:Request ,res:Response)=>{
         rutinas = rows[0];
         
     }
+    console.log('rutinas ' +rutinas);
+    
     res.json(rutinas);
 }
 export const getRutina= async(req:Request ,res:Response)=>{
@@ -270,4 +279,20 @@ export const getDetalles= async (req:Request ,res:Response)=>{
     detalles = rows[0];    
     
     res.json(detalles);
+}
+export const deletedetalle=async (req:Request ,res:Response)=>{
+    const {id}=req.params;
+    
+    const detalle = await DetalleR.findByPk(id);
+    
+    if (!detalle) {
+        return res.status(404).json({
+            msg: `No existe una detalle con el id ${id}`
+        })
+    }
+    await detalle.destroy();
+    
+    res.json({
+        msg: true
+    })
 }

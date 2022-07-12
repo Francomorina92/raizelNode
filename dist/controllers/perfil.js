@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePerfil = exports.putPerfil = exports.postPerfil = exports.getPerfil = exports.getPerfiles = void 0;
+exports.deletePerfil = exports.putPerfil = exports.postPerfil = exports.getPerfilPropio = exports.getPerfil = exports.getPerfiles = void 0;
 const perfil_1 = __importDefault(require("../models/perfil"));
 const getPerfiles = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { limite = 5, desde = 1, orden = 'asc', campo = 'nombre' } = req.query;
@@ -41,6 +41,23 @@ const getPerfil = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getPerfil = getPerfil;
+const getPerfilPropio = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const perfil = yield perfil_1.default.findAll({
+        where: {
+            id: id
+        }
+    });
+    if (perfil) {
+        res.json(perfil[0]);
+    }
+    else {
+        res.status(404).json({
+            msg: `No existe un perfil con el id ${id}`
+        });
+    }
+});
+exports.getPerfilPropio = getPerfilPropio;
 const postPerfil = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Obtenemos los datos por el post
     const { nombre, idUsuario } = req.body;
@@ -60,7 +77,11 @@ const putPerfil = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     let { nombre, idUsuario, apellido, facebook, twitter, instagram, web, estado } = req.body;
     try {
-        const perfil = yield perfil_1.default.findByPk(id);
+        const perfil = yield perfil_1.default.findOne({
+            where: {
+                id: id
+            }
+        });
         if (!perfil) {
             return res.status(404).json({
                 msg: `No existe un perfil con el id ${id}`

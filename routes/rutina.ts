@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { deleteRutina, getRutina, getRutinas, postRutina, putRutina, postDetalleRutina, getDetalles, putDetalleRutina } from "../controllers/rutina";
+import { deleteRutina, getRutina, getRutinas, postRutina, putRutina, postDetalleRutina, getDetalles, putDetalleRutina, deletedetalle } from "../controllers/rutina";
 import validarCampos from "../middlewares/validar-campos";
 import {esPerfilValido} from "../helpers/db-validators";
 import validarJWT from "../middlewares/validar-jwt";
@@ -231,10 +231,39 @@ router.put('/:id',[
  *            schema:
  *              $ref: '#/components/schemas/rutinaGet'
  */
-router.delete('/:id',[
+router.delete('/detalle/:id',[
     check('id').isInt(),
     validarCampos
-],  deleteRutina);
+],  deletedetalle);
+/**
+ * Post track
+ * @openapi
+ *    /rutinas/{id}:
+ *  delete:
+ *    tags:
+ *    - Rutinas
+ *    summary: Eliminar rutina
+ *    operationId: rutinaDelete
+ *    parameters:
+ *    - $ref: '#/components/parameters/token'
+ *    - name: id
+ *      in: path
+ *      description: Id de la rutina que queremos eliminar
+ *      required: true
+ *      schema:
+ *        type: string
+ *    responses:
+ *      200:
+ *        description: successful operation
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/rutinaGet'
+ */
+/* router.delete('/:id',[
+    check('id').isInt(),
+    validarCampos
+],  deleteRutina); */
 /**
  * Post track
  * @openapi

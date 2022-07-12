@@ -22,6 +22,7 @@ const ejercicio_1 = __importDefault(require("../models/ejercicio"));
 const rutina_1 = __importDefault(require("../models/rutina"));
 const { QueryTypes } = require('sequelize');
 const conecction_1 = __importDefault(require("../db/conecction"));
+const perfil_1 = __importDefault(require("../models/perfil"));
 /* cloudinary.config('cloudinary://687898186776262:LBH4rOuM49gwoHiMvlRgxWQrcOs@raizel'); */
 cloudinary_1.v2.config({
     cloud_name: 'raizel',
@@ -101,7 +102,11 @@ const actualizarArchivoCloudinary = (req, res) => __awaiter(void 0, void 0, void
     let modelo;
     switch (coleccion) {
         case 'usuarios':
-            modelo = yield usuario_1.default.findByPk(id);
+            modelo = yield perfil_1.default.findOne({
+                where: {
+                    idUSuario: id
+                }
+            });
             if (!modelo) {
                 return res.status(400).json({ msg: `No existe usuario con el id ${id}` });
             }
