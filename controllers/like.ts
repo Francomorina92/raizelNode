@@ -130,9 +130,10 @@ export const getMeGustasUltimos= async (req:Request ,res:Response)=>{
     }); 
     const idP = (per as any).id
     let fechaActual = new Date();
-    fechaActual = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 1);
+    /* fechaActual = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDay()); */
     let desde = new Date();
     desde.setMonth(desde.getMonth() - 2);
+    
     
     const rows = await db.query('call getMeGustasUltimos(:idP, :desde, :fechaActual)', { 
         replacements: { idP, desde, fechaActual }, 
@@ -140,6 +141,7 @@ export const getMeGustasUltimos= async (req:Request ,res:Response)=>{
         type: QueryTypes.SELECT
     });
     const likes = rows[0];
+    
     res.json({likes});
     /* res.json('ok'); */
 }

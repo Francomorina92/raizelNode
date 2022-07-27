@@ -5,7 +5,7 @@ import db from "../db/conecction";
 import Perfil from "../models/perfil";
 
 export const getEjercicios= async (req:Request ,res:Response)=>{
-    const {limite = 5,desde = 1,orden = 'desc',campo = 'nombre', filtro = ''}= req.query; 
+    let {limite = 5,desde = 1,orden = 'desc',campo = 'nombre', filtro = '', id = 0}= req.query; 
     if (!(req as any).user) {
         return res.status(500).json({
             msg:' Se quiere validar el token primero'
@@ -16,7 +16,9 @@ export const getEjercicios= async (req:Request ,res:Response)=>{
             idUsuario: (req as any).user.id
         }
     }); 
-    const id = (per as any).id
+    if (id == 0) {
+        id = (per as any).id
+    }
     let ejercicios=null;     
     
     const rows = await db.query('call getEjercicios(:filtro, :id, :limite, :desde, :orden, :campo)', { 

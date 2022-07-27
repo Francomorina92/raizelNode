@@ -18,7 +18,7 @@ const { QueryTypes } = require('sequelize');
 const conecction_1 = __importDefault(require("../db/conecction"));
 const perfil_1 = __importDefault(require("../models/perfil"));
 const getEjercicios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limite = 5, desde = 1, orden = 'desc', campo = 'nombre', filtro = '' } = req.query;
+    let { limite = 5, desde = 1, orden = 'desc', campo = 'nombre', filtro = '', id = 0 } = req.query;
     if (!req.user) {
         return res.status(500).json({
             msg: ' Se quiere validar el token primero'
@@ -29,7 +29,9 @@ const getEjercicios = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             idUsuario: req.user.id
         }
     });
-    const id = per.id;
+    if (id == 0) {
+        id = per.id;
+    }
     let ejercicios = null;
     const rows = yield conecction_1.default.query('call getEjercicios(:filtro, :id, :limite, :desde, :orden, :campo)', {
         replacements: { filtro, id, limite, desde, orden, campo },

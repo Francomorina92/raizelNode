@@ -143,7 +143,7 @@ const getMeGustasUltimos = (req, res) => __awaiter(void 0, void 0, void 0, funct
     });
     const idP = per.id;
     let fechaActual = new Date();
-    fechaActual = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 1);
+    /* fechaActual = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDay()); */
     let desde = new Date();
     desde.setMonth(desde.getMonth() - 2);
     const rows = yield conecction_1.default.query('call getMeGustasUltimos(:idP, :desde, :fechaActual)', {
